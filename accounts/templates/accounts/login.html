@@ -129,6 +129,12 @@
             Enter your username and password below to access your IntelliTrack account.
         </div>
 
+        {% if error %}
+            <div style="color: #ff5555; margin-bottom: 15px; text-align: center;">
+                {{ error }}
+            </div>
+        {% endif %}
+
         <form action="/login/" method="POST">
             <!-- Username -->
             <div class="input-group">

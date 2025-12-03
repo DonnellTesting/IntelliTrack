@@ -19,8 +19,10 @@ def reset_password(request):
     return render(request, 'accounts/reset_password.html')
 
 # app/views.py
-@csrf_exempt
+@csrf_exempt 
 def login_page(request):
+    error_message = None  # default, no error
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -30,19 +32,19 @@ def login_page(request):
 
         if user is not None:
             if user.role != selected_role:
-                return render(request, 'accounts/login.html', {'error': "User exists but does not have the selected role."})
+                error_message = "User exists but does not have the selected role."
             else:
                 login(request, user)
                 # Redirect based on role
                 if user.role == 'student':
-                    return redirect('/student')
+                    return redirect('/student/')
                 elif user.role == 'instructor':
-                    return redirect('/instructor')
+                    return redirect('/instructor/')
                 elif user.role == 'company':
-                    return redirect('/supervisor')
+                    return redirect('/supervisor/')
                 elif user.role == 'admin':
-                    return redirect('/admin-dashboard')
+                    return redirect('/admin-dashboard/')
         else:
-            return render(request, 'accounts/login.html', {'error': "Invalid username or password."})
-    else:
-        return render(request, 'accounts/login.html')
+            error_message = "Invalid username or password."
+
+    return render(request, 'accounts/login.html', {'error': error_message})
