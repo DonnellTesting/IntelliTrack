@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account – IntelliTrack</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f9fc;
+      color: #1a1a1a;
+    }
+
+    .container {
+      max-width: 460px;
+      margin: 60px auto;
+      background: white;
+      padding: 35px 45px;
+      border-radius: 14px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    p.description {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 15px;
+      color: #5b5b5b;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #d4d4d4;
+      font-size: 15px;
+      margin-bottom: 20px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background: #1e4ecb;
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 14px;
+    }
+
+    .footer-links a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .name-group {
+      display: flex;
+      gap: 15px;
+    }
+
+    .name-group input {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h2>Create an account</h2>
+    <p class="description">Enter your details below to create your account</p>
+
+    <form action="/register" method="POST">
+      {% csrf_token %}
+
+      <div class="name-group">
+        <div>
+          <label>First Name</label>
+          <input type="text" name="first_name" placeholder="Juan" required />
+        </div>
+
+        <div>
+          <label>Last Name</label>
+          <input type="text" name="last_name" placeholder="Dela Cruz" required />
+        </div>
+      </div>
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="email@example.com" required />
+
+      <label>Username</label>
+      <input type="text" name="username" placeholder="example-username" required />
+
+      <label>Password</label>
+      <input type="password" name="password" required />
+
+      <label>Confirm Password</label>
+      <input type="password" name="confirm_password" required />
+
+      <label>Select a Role</label>
+      <select name="role" required>
+        <option value="" disabled selected>Choose role...</option>
+        <option value="student">Student</option>
+        <option value="instructor">Instructor</option>
+        <option value="company">Company Supervisor</option>
+        <option value="admin">Administrator</option>
+      </select>
+
+      <button type="submit">Create account</button>
+    </form>
+
+    <div class="footer-links">
+      Already have an account? <a href="/login">Log in</a>
+    </div>
+  </div>
+</body>
+</html>

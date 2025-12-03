@@ -20,4 +20,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),  # root URL points to app1
+    path('student/', include('student.urls')),
+    path('instructor/', include('teacher.urls')),
+    path('supervisor/', include('companies.urls')),
+    path('admin-dashboard/', include('admin_panel.urls')),
 ]

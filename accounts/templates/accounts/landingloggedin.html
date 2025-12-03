@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IntelliTrack - OJT Management System</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+    }
+
+    body {
+        background: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+        background: white;
+        padding: 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    header h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0066cc;
+    }
+
+    header button {
+        padding: 10px 18px;
+        background: #0066cc;
+        border: none;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+    header button:hover {
+        background: #004d99;
+    }
+
+    /* Hero Section */
+    .hero {
+        padding: 100px 40px;
+        text-align: center;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .hero h2 {
+        font-size: 48px;
+        font-weight: 800;
+        color: #003d80;
+        margin-bottom: 10px;
+    }
+
+    .hero h3 {
+        font-size: 20px;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        max-width: 700px;
+        margin: 20px auto;
+        font-size: 17px;
+        color: #444;
+    }
+
+    .hero .btn-primary {
+        display: inline-block;
+        margin-top: 25px;
+        padding: 14px 28px;
+        background: #0066cc;
+        color: white;
+        border-radius: 8px;
+        font-size: 16px;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+    .hero .btn-primary:hover {
+        background: #004d99;
+    }
+
+    /* Section Title */
+    .section-title {
+        text-align: center;
+        margin: 80px 0 30px;
+        font-size: 32px;
+        font-weight: 700;
+        color: #003d80;
+    }
+
+    /* Features Grid */
+    .features,
+    .capabilities {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 25px;
+        max-width: 1100px;
+        margin: auto;
+        padding: 0 40px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        transition: .2s;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    .card h4 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        color: #003d80;
+    }
+
+    .card p {
+        font-size: 14px;
+        color: #555;
+    }
+
+    /* CTA */
+    .cta {
+        text-align: center;
+        padding: 80px 40px;
+        background: #003d80;
+        color: white;
+        margin-top: 80px;
+    }
+
+    .cta h2 {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+
+    .cta p {
+        font-size: 17px;
+        max-width: 700px;
+        margin: auto;
+        margin-bottom: 30px;
+    }
+
+    .cta .btn-white {
+        background: white;
+        color: #003d80;
+        padding: 14px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .2s;
+    }
+
+    .cta .btn-white:hover {
+        background: #e3e3e3;
+    }
+
+    /* Footer */
+    footer {
+        background: #f0f2f5;
+        padding: 20px;
+        text-align: center;
+        font-size: 14px;
+        margin-top: 40px;
+        color: #666;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>IntelliTrack</h1>
+    <button onclick="goDashboard()">Dashboard</button>
+</header>
+
+<section class="hero">
+    <h2>President Ramon Magsaysay State University</h2>
+    <h3>Comprehensive OJT Management System</h3>
+    <p>
+        Monitor, Evaluate, and Analyze OJT Performance  
+        <br><br>
+        IntelliTrack is a powerful web-based platform designed to streamline On-the-Job Training monitoring, 
+        track trainee progress in real-time, and provide comprehensive performance analytics for educational 
+        institutions and organizations.
+    </p>
+    <a href="#" class="btn-primary" onclick="goDashboard()">Go to Dashboard</a>
+</section>
+
+<h2 class="section-title">Powerful Features for OJT Management</h2>
+<div class="features">
+    <div class="card"><h4>Real-Time Progress Tracking</h4><p>Monitor trainee progress with live updates and dashboards.</p></div>
+    <div class="card"><h4>Performance Evaluation</h4><p>Tools for detailed and comprehensive assessment.</p></div>
+    <div class="card"><h4>Advanced Analytics</h4><p>Powerful reporting for data-driven decisions.</p></div>
+    <div class="card"><h4>Time Management</h4><p>Track attendance, schedules, and time logs automatically.</p></div>
+    <div class="card"><h4>Task & Submission Tracking</h4><p>Monitor tasks, requirements, and submissions.</p></div>
+    <div class="card"><h4>Multi-Role Management</h4><p>Seamless coordination across users and roles.</p></div>
+</div>
+
+<h2 class="section-title">Why Choose IntelliTrack?</h2>
+<div class="features">
+    <div class="card"><h4>Improved Performance</h4><p>Identify strengths and areas for improvement easily.</p></div>
+    <div class="card"><h4>Secure & Reliable</h4><p>Role-based access & enterprise-grade security.</p></div>
+    <div class="card"><h4>Efficient Workflow</h4><p>Reduce administrative workload significantly.</p></div>
+    <div class="card"><h4>Quality Assurance</h4><p>Ensure consistent training quality system-wide.</p></div>
+</div>
+
+<h2 class="section-title">Comprehensive Capabilities</h2>
+<div class="capabilities">
+    <div class="card"><h4>Progress Tracking</h4><p>Monitor milestones and completion progress.</p></div>
+    <div class="card"><h4>Performance Evaluation</h4><p>Customize assessment criteria and review tools.</p></div>
+    <div class="card"><h4>Real-Time Reporting</h4><p>Generate instant analytics and visual reports.</p></div>
+    <div class="card"><h4>Schedule Management</h4><p>Organize training schedules with reminders.</p></div>
+    <div class="card"><h4>Task Management</h4><p>Assign and evaluate tasks easily.</p></div>
+    <div class="card"><h4>Communication</h4><p>Connect trainees, instructors, and supervisors.</p></div>
+</div>
+
+<section class="cta">
+    <h2>Ready to Transform Your OJT Management?</h2>
+    <p>Join educational institutions and organizations already using IntelliTrack to streamline their OJT programs.</p>
+    <a href="#" class="btn-white" onclick="goDashboard()">Go to Dashboard</a>
+</section>
+
+<footer>
+    IntelliTrack © 2025. All rights reserved.
+</footer>
+
+<script>
+function goDashboard() {
+    window.location.href = "/dashboard"; // Change this to your actual dashboard route
+}
+</script>
+
+</body>
+</html>
