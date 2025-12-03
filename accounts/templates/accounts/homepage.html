@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechThesis Hub</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f5f7;
+            color: #1d1d1d;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 60px auto;
+            text-align: center;
+        }
+
+        .container h2 {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .container p {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .role-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: 0.2s ease;
+            cursor: pointer;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+
+        .role-card h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .role-card p {
+            font-size: 16px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #007bff;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #0064d3;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>TechThesis Hub</h1>
+        <a href="/login" class="btn">Login</a>
+    </header>
+
+    <div class="container">
+        <h2>Choose Your Role</h2>
+        <p>Select who you are to get started.</p>
+
+        <div class="role-grid">
+
+            <!-- Student -->
+            <div class="role-card">
+                <h3>Student</h3>
+                <p>Need help with thesis, capstone, or programming projects?</p>
+                <a href="/register/student" class="btn">Register as Student</a>
+            </div>
+
+            <!-- Teacher -->
+            <div class="role-card">
+                <h3>Teacher / Mentor</h3>
+                <p>Offer guidance, review submissions, or mentor learners.</p>
+                <a href="/register/teacher" class="btn">Register as Teacher</a>
+            </div>
+
+            <!-- Company -->
+            <div class="role-card">
+                <h3>Company / Client</h3>
+                <p>Request project development, outsourcing, or consultancy.</p>
+                <a href="/register/company" class="btn">Register as Company</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
