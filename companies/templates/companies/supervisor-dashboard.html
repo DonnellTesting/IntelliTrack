@@ -3,9 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <title>Supervisor Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #1F2A37;
+            color: white;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: #273849;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.4);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-item {
+            padding: 14px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .nav-item:hover {
+            background: #1F2A37;
+            opacity: 1;
+        }
+
+        /* PROFILE BOX */
+        .profile-box {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-box:hover {
+            background: #1F2A37;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .profile-dropdown {
+            display: none;
+            flex-direction: column;
+            background: #1C2833;
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .profile-dropdown a {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .profile-dropdown a:hover {
+            background: #0F172A;
+            opacity: 1;
+        }
+
+        /* MAIN CONTENT */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome, Supervisor!</h1>
-    <p>This is your dashboard. More features coming soon.</p>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+        <div>
+            <h2>Supervisor</h2>
+
+            <div class="nav-links">
+                <div class="nav-item" onclick="location.href='/supervisor'">Home</div>
+                <div class="nav-item" onclick="location.href='/supervisor/students'">Students Supervised</div>
+                <div class="nav-item" onclick="location.href='/supervisor/timesheets'">Sign Timesheets</div>
+                <div class="nav-item" onclick="location.href='/supervisor/performance'">Rate Performance</div>
+            </div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="profile-box" onclick="toggleProfileDropdown()">
+            <div class="profile-name">My Profile ▾</div>
+
+            <div id="profileDropdown" class="profile-dropdown">
+                <a href="/profile">View Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-area">
+        <h1>Welcome, Supervisor!</h1>
+        <p>Manage your supervised students, sign their timesheets, and evaluate their performance.</p>
+    </div>
+
+    <script>
+        function toggleProfileDropdown() {
+            let menu = document.getElementById("profileDropdown");
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+    </script>
+
 </body>
 </html>
