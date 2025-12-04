@@ -22,7 +22,6 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            padding: 0;
             box-shadow: 2px 0 5px rgba(0,0,0,0.4);
         }
 
@@ -33,18 +32,13 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .logo-circle {
-            width: 60px;
-            height: 60px;
-            background: #3B82F6;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 900;
-            font-size: 20px;
-            color: white;
+        .home-logo {
+            width: 120px;
+            margin: 0 auto 25px;
+        }
+        .home-logo img {
+            width: 100%;
+            display: block;
         }
 
         .app-name {
@@ -78,7 +72,27 @@
             opacity: 1;
         }
 
-        /* PROFILE FOOTER */
+        /* DROPDOWN (added like instructor) */
+        .dropdown {
+            display: none;
+            flex-direction: column;
+            background: #1C2833;
+        }
+
+        .dropdown a {
+            padding: 12px 45px;
+            text-decoration: none;
+            color: #60A5FA;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .dropdown a:hover {
+            background: #0F172A;
+            opacity: 1;
+        }
+
+        /* PROFILE */
         .profile-box {
             padding: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
@@ -127,40 +141,47 @@
             padding: 40px;
             overflow-y: auto;
         }
-
-        .home-logo {
-        display: block;
-        margin: 0 auto 25px; /* center and spacing below */
-        width: 120px; /* adjust size as needed */
-        }
-
-        .home-logo img {
-        width: 100%;
-        height: auto; /* preserves aspect ratio */
-        display: block;
-        }
     </style>
+
+    <script>
+        function toggleDropdown(id) {
+            let menu = document.getElementById(id);
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+
+        function toggleProfileDropdown() {
+            let menu = document.getElementById("profileDropdown");
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+    </script>
+
 </head>
 <body>
 
     <!-- SIDEBAR -->
     <div class="sidebar">
 
-        <!-- HEADER LOGO + ROLE -->
+        <!-- LOGO -->
         <div class="sidebar-header">
             <div class="home-logo">
-                <img src="{% static 'companies/resources/logo.png' %}" alt="IntelliTrack Logo" />
+                <img src="{% static 'companies/resources/logo.png' %}" alt="IntelliTrack Logo">
             </div>
             <div class="app-name">IntelliTrack</div>
             <div class="role-label">Supervisor</div>
         </div>
 
-        <!-- NAV -->
+        <!-- NAVIGATION -->
         <div class="nav-links">
             <div class="nav-item" onclick="location.href='/supervisor'">Home</div>
             <div class="nav-item" onclick="location.href='/supervisor/students'">Students Supervised</div>
             <div class="nav-item" onclick="location.href='/supervisor/timesheets'">Sign Timesheets</div>
             <div class="nav-item" onclick="location.href='/supervisor/performance'">Rate Performance</div>
+
+            <div class="nav-item" onclick="toggleDropdown('annMenu')">Announcements ▾</div>
+            <div id="annMenu" class="dropdown">
+                <a href="/supervisor/announcements/create">Create Announcements</a>
+                <a href="/supervisor/announcements/view">View Announcements</a>
+            </div>
         </div>
 
         <!-- PROFILE -->
@@ -172,6 +193,7 @@
                 <a href="/logout">Logout</a>
             </div>
         </div>
+
     </div>
 
     <!-- MAIN CONTENT -->
@@ -179,15 +201,6 @@
         <h1>Welcome, Supervisor!</h1>
         <p>Manage supervised students, sign timesheets, and evaluate performance.</p>
     </div>
-
-    
-
-    <script>
-        function toggleProfileDropdown() {
-            let menu = document.getElementById("profileDropdown");
-            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-        }
-    </script>
 
 </body>
 </html>

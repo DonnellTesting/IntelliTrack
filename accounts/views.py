@@ -2,6 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
+from django.contrib.auth import logout
+
+def logout_user(request):
+    logout(request)
+    return redirect('/login/')
 
 def landing_page(request):
     return render(request, "accounts/landing.html")
