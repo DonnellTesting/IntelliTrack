@@ -1,174 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
 
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #1F2A37;
-        color: white;
-        display: flex;
-        height: 100vh;
-    }
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #1F2A37;
+            color: white;
+            display: flex;
+            height: 100vh;
+        }
 
-    /* SIDEBAR */
-    .sidebar {
-        width: 260px;
-        background: #273849;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 20px 0;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.4);
-    }
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: #273849;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.4);
+        }
 
-    .sidebar h2 {
-        text-align: center;
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 30px;
-        padding: 0 20px;
-    }
+        /* HEADER LOGO AREA */
+        .sidebar-header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
 
-    .nav-links {
-        display: flex;
-        flex-direction: column;
-    }
+        .home-logo {
+            display: block;
+            margin: 0 auto 25px;
+            width: 120px;
+        }
 
-    .nav-item {
-        padding: 14px 25px;
-        cursor: pointer;
-        font-weight: 600;
-        opacity: 0.9;
-    }
+        .home-logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
 
-    .nav-item:hover {
-        background: #1F2A37;
-        opacity: 1;
-    }
+        .app-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
 
-    /* DROPDOWN */
-    .dropdown {
-        display: none;
-        flex-direction: column;
-        background: #1C2833;
-    }
+        .role-label {
+            font-size: 14px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
 
-    .dropdown a {
-        padding: 12px 40px;
-        text-decoration: none;
-        color: #60A5FA;
-        font-size: 14px;
-        opacity: 0.9;
-    }
+        /* NAVIGATION */
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
 
-    .dropdown a:hover {
-        opacity: 1;
-        background: #0F172A;
-    }
+        .nav-item {
+            padding: 14px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 0.9;
+        }
 
-    /* FOOTER PROFILE */
-    .profile-box {
-        padding: 20px;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        cursor: pointer;
-        position: relative;
-    }
+        .nav-item:hover {
+            background: #1F2A37;
+            opacity: 1;
+        }
 
-    .profile-box:hover {
-        background: #1F2A37;
-    }
+        /* SUBMENU / DROPDOWN */
+        .dropdown {
+            display: none;
+            flex-direction: column;
+            background: #1C2833;
+        }
 
-    .profile-name {
-        font-weight: 600;
-        opacity: 0.9;
-    }
+        .dropdown a {
+            padding: 12px 45px;
+            text-decoration: none;
+            color: #60A5FA;
+            font-size: 14px;
+            opacity: 0.9;
+        }
 
-    .profile-dropdown {
-        display: none;
-        flex-direction: column;
-        background: #1C2833;
-        position: absolute;
-        bottom: 60px;
-        left: 20px;
-        width: 200px;
-        border-radius: 8px;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-    }
+        .dropdown a:hover {
+            background: #0F172A;
+            opacity: 1;
+        }
 
-    .profile-dropdown a {
-        padding: 12px 15px;
-        text-decoration: none;
-        color: white;
-        font-size: 14px;
-        opacity: 0.9;
-    }
+        /* PROFILE FOOTER */
+        .profile-box {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            position: relative;
+            margin-top: auto;
+        }
 
-    .profile-dropdown a:hover {
-        background: #0F172A;
-        opacity: 1;
-    }
+        .profile-box:hover {
+            background: #1F2A37;
+        }
 
-    /* MAIN CONTENT */
-    .content-area {
-        flex: 1;
-        padding: 40px;
-        overflow-y: auto;
-    }
-</style>
+        .profile-name {
+            font-weight: 600;
+            opacity: 0.9;
+        }
 
-<script>
-    // Toggle dropdowns
-    function toggleDropdown(id) {
-        let menu = document.getElementById(id);
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
+        .profile-dropdown {
+            display: none;
+            flex-direction: column;
+            background: #1C2833;
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
 
-    function toggleProfile() {
-        let menu = document.getElementById("profileMenu");
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-</script>
+        .profile-dropdown a {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .profile-dropdown a:hover {
+            background: #0F172A;
+            opacity: 1;
+        }
+
+        /* MAIN CONTENT */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+    </style>
+
+    <script>
+        function toggleDropdown(id) {
+            let menu = document.getElementById(id);
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+
+        function toggleProfile() {
+            let menu = document.getElementById("profileMenu");
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+    </script>
 
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
-    <div>
-        <h2>Student Panel</h2>
-
-        <div class="nav-links">
-
-            <div class="nav-item">Home</div>
-
-            <div class="nav-item" onclick="toggleDropdown('ojtMenu')">
-                OJT Management ▾
-            </div>
-            <div id="ojtMenu" class="dropdown">
-                <a href="#">My Timesheet</a>
-                <a href="#">My Performance</a>
-                <a href="#">My OJT Placement</a>
-            </div>
-
-            <div class="nav-item">Announcements</div>
-
+    <!-- SIDEBAR HEADER -->
+    <div class="sidebar-header">
+        {% load static %}
+        <div class="home-logo">
+            <img src="{% static 'student/resources/logo.png' %}" alt="IntelliTrack Logo" />
         </div>
+        <div class="app-name">IntelliTrack</div>
+        <div class="role-label">Student</div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav-links">
+
+        <div class="nav-item" onclick="location.href='/student'">Home</div>
+
+        <div class="nav-item" onclick="toggleDropdown('ojtMenu')">
+            OJT Management ▾
+        </div>
+        <div id="ojtMenu" class="dropdown">
+            <a href="/student/timesheet">My Timesheet</a>
+            <a href="/student/performance">My Performance</a>
+            <a href="/student/placement">My OJT Placement</a>
+        </div>
+
+        <div class="nav-item" onclick="location.href='/student/announcements'">
+            Announcements
+        </div>
+
     </div>
 
     <!-- FOOTER PROFILE -->
     <div class="profile-box" onclick="toggleProfile()">
-        <div class="profile-name">Student User</div>
-    </div>
+        <div class="profile-name">My Profile ▾</div>
 
-    <div id="profileMenu" class="profile-dropdown">
-        <a href="#">Profile</a>
-        <a href="/logout">Logout</a>
+        <div id="profileMenu" class="profile-dropdown">
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
     </div>
 
 </div>
@@ -176,7 +209,7 @@
 <!-- MAIN CONTENT -->
 <div class="content-area">
     <h1>Welcome, Student!</h1>
-    <p>Your dashboard is ready. Select a menu item from the sidebar to begin.</p>
+    <p>Your dashboard is ready. Choose an option on the left to begin.</p>
 </div>
 
 </body>

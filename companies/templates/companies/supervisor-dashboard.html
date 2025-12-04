@@ -20,22 +20,49 @@
             background: #273849;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 20px 0;
+            justify-content: flex-start;
+            padding: 0;
             box-shadow: 2px 0 5px rgba(0,0,0,0.4);
         }
 
-        .sidebar h2 {
+        /* HEADER LOGO AREA */
+        .sidebar-header {
             text-align: center;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            padding: 0 20px;
+            padding: 30px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
+        .logo-circle {
+            width: 60px;
+            height: 60px;
+            background: #3B82F6;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 900;
+            font-size: 20px;
+            color: white;
+        }
+
+        .app-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .role-label {
+            font-size: 14px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        /* NAVIGATION */
         .nav-links {
             display: flex;
             flex-direction: column;
+            padding: 20px 0;
         }
 
         .nav-item {
@@ -50,12 +77,13 @@
             opacity: 1;
         }
 
-        /* PROFILE BOX */
+        /* PROFILE FOOTER */
         .profile-box {
             padding: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
             position: relative;
+            margin-top: auto;
         }
 
         .profile-box:hover {
@@ -98,6 +126,18 @@
             padding: 40px;
             overflow-y: auto;
         }
+
+        .home-logo {
+        display: block;
+        margin: 0 auto 25px; /* center and spacing below */
+        width: 120px; /* adjust size as needed */
+        }
+
+        .home-logo img {
+        width: 100%;
+        height: auto; /* preserves aspect ratio */
+        display: block;
+        }
     </style>
 </head>
 <body>
@@ -105,15 +145,22 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
 
-        <div>
-            <h2>Supervisor</h2>
-
-            <div class="nav-links">
-                <div class="nav-item" onclick="location.href='/supervisor'">Home</div>
-                <div class="nav-item" onclick="location.href='/supervisor/students'">Students Supervised</div>
-                <div class="nav-item" onclick="location.href='/supervisor/timesheets'">Sign Timesheets</div>
-                <div class="nav-item" onclick="location.href='/supervisor/performance'">Rate Performance</div>
+        <!-- HEADER LOGO + ROLE -->
+        <div class="sidebar-header">
+            {% load static %}
+            <div class="home-logo">
+                <img src="{% static 'companies/resources/logo.png' %}" alt="IntelliTrack Logo" />
             </div>
+            <div class="app-name">IntelliTrack</div>
+            <div class="role-label">Supervisor</div>
+        </div>
+
+        <!-- NAV -->
+        <div class="nav-links">
+            <div class="nav-item" onclick="location.href='/supervisor'">Home</div>
+            <div class="nav-item" onclick="location.href='/supervisor/students'">Students Supervised</div>
+            <div class="nav-item" onclick="location.href='/supervisor/timesheets'">Sign Timesheets</div>
+            <div class="nav-item" onclick="location.href='/supervisor/performance'">Rate Performance</div>
         </div>
 
         <!-- PROFILE -->
@@ -130,8 +177,10 @@
     <!-- MAIN CONTENT -->
     <div class="content-area">
         <h1>Welcome, Supervisor!</h1>
-        <p>Manage your supervised students, sign their timesheets, and evaluate their performance.</p>
+        <p>Manage supervised students, sign timesheets, and evaluate performance.</p>
     </div>
+
+    
 
     <script>
         function toggleProfileDropdown() {
