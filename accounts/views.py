@@ -6,9 +6,6 @@ from .models import User
 def landing_page(request):
     return render(request, "accounts/landing.html")
 
-# def login_page(request):
-#     return render(request, 'accounts/login.html')
-
 def register_page(request):
     return render(request, 'accounts/register.html')
 

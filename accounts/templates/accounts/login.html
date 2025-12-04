@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -143,7 +144,6 @@
 <div class="container">
     <div class="card">
 
-        {% load static %}
         <a href="/" class="home-logo">
             <img src="{% static 'accounts/resources/logo.png' %}" alt="IntelliTrack Logo" />
         </a>
@@ -161,6 +161,7 @@
         {% endif %}
 
         <form action="/login/" method="POST">
+            {% csrf_token %}
             <div class="input-group">
                 <label>Username</label>
                 <input type="text" name="username" placeholder="example123" required>
