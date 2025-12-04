@@ -9,31 +9,37 @@
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #f7f9fc;
-      color: #1a1a1a;
+      background: #1F2A37; /* dark background */
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
     }
 
     .container {
       max-width: 460px;
-      margin: 60px auto;
-      background: white;
+      width: 100%;
+      background: rgba(255,255,255,0.07); /* glass-like card */
       padding: 35px 45px;
-      border-radius: 14px;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      backdrop-filter: blur(12px);
     }
 
     h2 {
       margin: 0 0 10px;
       font-size: 28px;
       font-weight: 700;
-      text-align: center;
+      color: white;
     }
 
     p.description {
       text-align: center;
       margin-bottom: 25px;
       font-size: 15px;
-      color: #5b5b5b;
+      color: #cfd8e3;
     }
 
     label {
@@ -41,31 +47,38 @@
       font-size: 14px;
       margin-bottom: 6px;
       font-weight: 600;
+      color: #cfd8e3;
+      text-align: left;
     }
 
     input, select {
       width: 100%;
       padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #d4d4d4;
+      border-radius: 10px;
+      border: none;
+      background: #273849; /* dark input */
+      color: white;
       font-size: 15px;
       margin-bottom: 20px;
     }
 
+    input::placeholder {
+      color: #b0b8c1; /* subtle placeholder */
+    }
+
     input:focus, select:focus {
       outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.25); /* accent focus */
     }
 
     button {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 16px;
       font-weight: 600;
-      background: #2563eb;
+      background: #3B82F6; /* accent blue */
       color: white;
       cursor: pointer;
       transition: background 0.25s ease;
@@ -73,7 +86,7 @@
     }
 
     button:hover {
-      background: #1e4ecb;
+      background: #2563eb;
     }
 
     .footer-links {
@@ -83,7 +96,7 @@
     }
 
     .footer-links a {
-      color: #2563eb;
+      color: #60A5FA; /* theme accent */
       text-decoration: none;
       font-weight: 600;
     }
@@ -112,17 +125,11 @@
     <form action="/register" method="POST">
       {% csrf_token %}
 
-      <div class="name-group">
-        <div>
-          <label>First Name</label>
-          <input type="text" name="first_name" placeholder="Juan" required />
-        </div>
+      <label>First Name</label>
+      <input type="text" name="first_name" placeholder="First Name" required />
 
-        <div>
-          <label>Last Name</label>
-          <input type="text" name="last_name" placeholder="Dela Cruz" required />
-        </div>
-      </div>
+      <label>Last Name</label>
+      <input type="text" name="last_name" placeholder="Last Name" required />
 
       <label>Email</label>
       <input type="email" name="email" placeholder="email@example.com" required />
