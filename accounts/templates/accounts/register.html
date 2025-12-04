@@ -1,163 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Create Account – IntelliTrack</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account – IntelliTrack</title>
 
-  <style>
+<style>
     body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #1F2A37; /* dark background */
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #1F2A37;
+        color: white;
     }
 
     .container {
-      max-width: 460px;
-      width: 100%;
-      background: rgba(255,255,255,0.07); /* glass-like card */
-      padding: 35px 45px;
-      border-radius: 18px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-      backdrop-filter: blur(12px);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
     }
 
-    h2 {
-      margin: 0 0 10px;
-      font-size: 28px;
-      font-weight: 700;
-      color: white;
+    .card {
+        padding: 40px 35px;
+        border-radius: 18px;
+        max-width: 460px;
+        width: 100%;
+        {% comment %} background: rgba(255,255,255,0.07);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        backdrop-filter: blur(12px); {% endcomment %}
     }
 
-    p.description {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 15px;
-      color: #cfd8e3;
+    .title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: white;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        color: white;
+    }
+
+    .input-group {
+        margin-bottom: 18px;
+        display: flex;
+        flex-direction: column;
+        color: white;
     }
 
     label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #cfd8e3;
-      text-align: left;
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #cfd8e3;
     }
+
+    /* Smaller placeholder text */
+    input::placeholder,
+    select::placeholder {
+      font-size: 12px; /* smaller than the default 15px */
+      color: #b0b8c1; /* optional, keep the same subtle color */
+      text-align: left; /* if you still want it centered */
+    }
+
 
     input, select {
-      width: 100%;
-      padding: 12px;
+      padding: 12px 14px;
       border-radius: 10px;
       border: none;
-      background: #273849; /* dark input */
-      color: white;
+      outline: none;
       font-size: 15px;
-      margin-bottom: 20px;
-    }
-
-    input::placeholder {
-      color: #b0b8c1; /* subtle placeholder */
+      background: #273849;
+      color: white;
+      text-align: center; /* also center the typed text */
     }
 
     input:focus, select:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(59,130,246,0.25); /* accent focus */
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      background: #3B82F6; /* accent blue */
-      color: white;
-      cursor: pointer;
-      transition: background 0.25s ease;
-      margin-top: 5px;
-    }
-
-    button:hover {
-      background: #2563eb;
-    }
-
-    .footer-links {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 14px;
-    }
-
-    .footer-links a {
-      color: #60A5FA; /* theme accent */
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .footer-links a:hover {
-      text-decoration: underline;
+        box-shadow: 0 0 0 2px rgba(59,130,246,0.25);
     }
 
     .name-group {
-      display: flex;
-      gap: 15px;
+        display: flex;
+        gap: 15px;
     }
 
     .name-group input {
-      width: 100%;
+        width: 100%;
     }
-  </style>
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+        background-color: #3B82F6;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 5px;
+    }
+
+    .btn:hover {
+        background-color: #2563eb;
+    }
+
+    .footer-text {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .footer-text a {
+        color: #60A5FA;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .footer-text a:hover {
+        text-decoration: underline;
+    }
+
+    /* Logo / Home button */
+    .home-logo {
+        display: block;
+        margin: 0 auto 25px;
+        width: 120px;
+    }
+
+    .home-logo img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+</style>
 </head>
 
 <body>
-  <div class="container">
 
-    <h2>Create an account</h2>
-    <p class="description">Enter your details below to create your account</p>
+<div class="container">
+    <div class="card">
 
-    <form action="/register" method="POST">
-      {% csrf_token %}
+        {% load static %}
+        <a href="/" class="home-logo">
+            <img src="{% static 'accounts/resources/logo.png' %}" alt="IntelliTrack Logo" />
+        </a>
 
-      <label>First Name</label>
-      <input type="text" name="first_name" placeholder="First Name" required />
+        <div class="title">Create an account</div>
 
-      <label>Last Name</label>
-      <input type="text" name="last_name" placeholder="Last Name" required />
+        <div class="subtitle">
+            Enter your details below to create your account
+        </div>
 
-      <label>Email</label>
-      <input type="email" name="email" placeholder="email@example.com" required />
+        <form action="/register" method="POST">
+            {% csrf_token %}
+            <div class="input-group">
+                <label>First Name</label>
+                <input type="text" name="first_name" placeholder="First Name" required>
+            </div>
 
-      <label>Username</label>
-      <input type="text" name="username" placeholder="example-username" required />
+            <div class="input-group">
+                <label>Last Name</label>
+                <input type="text" name="last_name" placeholder="Last Name" required>
+            </div>
 
-      <label>Password</label>
-      <input type="password" name="password" required />
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@example.com" required>
+            </div>
 
-      <label>Confirm Password</label>
-      <input type="password" name="confirm_password" required />
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="example-username" required>
+            </div>
 
-      <label>Select a Role</label>
-      <select name="role" required>
-        <option value="" disabled selected>Choose role...</option>
-        <option value="student">Student</option>
-        <option value="instructor">Instructor</option>
-        <option value="company">Company Supervisor</option>
-        <option value="admin">Administrator</option>
-      </select>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="example-password" required>
+            </div>
 
-      <button type="submit">Create account</button>
-    </form>
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" name="confirm_password" placeholder="confirm-password" required>
+            </div>
 
-    <div class="footer-links">
-      Already have an account? <a href="/login">Log in</a>
+            <div class="input-group">
+                <label>Select a Role</label>
+                <select name="role" required>
+                    <option value="" disabled selected>Choose role...</option>
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="company">Company Supervisor</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+
+            <button class="btn" type="submit">Create account</button>
+        </form>
+
+        <div class="footer-text">
+            Already have an account? <a href="/login">Log in</a>
+        </div>
+
     </div>
-  </div>
+</div>
+
 </body>
 </html>
