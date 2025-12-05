@@ -20,6 +20,9 @@ def forgot_password(request):
 def reset_password(request):
     return render(request, 'accounts/reset_password.html')
 
+def profile_page(request):
+    return render(request, 'accounts/profile_page.html')
+
 # app/views.py
 @csrf_exempt 
 def login_page(request):
