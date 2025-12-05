@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #1F2A37;
+            color: white;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: #273849;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 0;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.4);
+        }
+
+        /* HEADER LOGO AREA */
+        .sidebar-header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .home-logo {
+            display: block;
+            margin: 0 auto 25px;
+            width: 120px;
+        }
+
+        .home-logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .app-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .role-label {
+            font-size: 14px;
+            opacity: 0.7;
+            font-weight: 600;
+        }
+
+        /* NAVIGATION */
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 14px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .nav-item:hover {
+            background: #1F2A37;
+            opacity: 1;
+        }
+
+        /* SUBMENU / DROPDOWN */
+        .dropdown {
+            display: none;
+            flex-direction: column;
+            background: #1C2833;
+        }
+
+        .dropdown a {
+            padding: 12px 45px;
+            text-decoration: none;
+            color: #60A5FA;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .dropdown a:hover {
+            background: #0F172A;
+            opacity: 1;
+        }
+
+        /* PROFILE FOOTER */
+        .profile-box {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            position: relative;
+            margin-top: auto;
+        }
+
+        .profile-box:hover {
+            background: #1F2A37;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .profile-dropdown {
+            display: none;
+            flex-direction: column;
+            background: #1C2833;
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .profile-dropdown a {
+            padding: 12px 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .profile-dropdown a:hover {
+            background: #0F172A;
+            opacity: 1;
+        }
+
+        /* MAIN CONTENT */
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+    </style>
+
+    <script>
+        function toggleDropdown(id) {
+            let menu = document.getElementById(id);
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+
+        function toggleProfile() {
+            let menu = document.getElementById("profileMenu");
+            menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+        }
+    </script>
+
+</head>
+<body>
+
+<div class="sidebar">
+
+    <!-- SIDEBAR HEADER -->
+    <div class="sidebar-header">
+        <div class="home-logo">
+            <img src="{% static 'admin_panel/resources/logo.png' %}" alt="IntelliTrack Logo" />
+        </div>
+        <div class="app-name">IntelliTrack</div>
+        <div class="role-label">Admin</div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="nav-links">
+
+        <div class="nav-item" onclick="location.href='/admin-dashboard'">Home</div>
+
+        <!-- USER MANAGEMENT -->
+        <div class="nav-item" onclick="toggleDropdown('userMgmt')">
+            User Management ▾
+        </div>
+        <div id="userMgmt" class="dropdown">
+            <a href="/admin-dashboard/users/add">Add User</a>
+            <a href="/admin-dashboard/users/edit">Edit User</a>
+            <a href="/admin-dashboard/users/delete">Delete User</a>
+        </div>
+
+        <!-- CLASS MANAGEMENT -->
+        <div class="nav-item" onclick="toggleDropdown('classMgmt')">
+            Class Management ▾
+        </div>
+        <div id="classMgmt" class="dropdown">
+            <a href="/admin-dashboard/classes/create">Create Class</a>
+            <a href="/admin-dashboard/classes/edit">Edit Class</a>
+            <a href="/admin-dashboard/classes/delete">Delete Class</a>
+        </div>
+
+        <!-- OJT MANAGEMENT -->
+        <div class="nav-item" onclick="toggleDropdown('ojtMgmt')">
+            OJT Management ▾
+        </div>
+        <div id="ojtMgmt" class="dropdown">
+            <a href="/admin-dashboard/ojt/placements">Assign / Edit Placements</a>
+        </div>
+
+    </div>
+
+    <!-- FOOTER PROFILE -->
+    <div class="profile-box" onclick="toggleProfile()">
+        <div class="profile-name">My Profile ▾</div>
+
+        <div id="profileMenu" class="profile-dropdown">
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content-area">
+    <h1>Welcome, Admin!</h1>
+    <p>Manage users, classes, and OJT placements from the menu on the left.</p>
+</div>
+
+</body>
+</html>
