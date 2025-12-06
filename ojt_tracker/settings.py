@@ -4,6 +4,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 AUTH_USER_MODEL = 'accounts.User'
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "donnelltongoy420@gmail.com"
+EMAIL_HOST_PASSWORD = "opky mynt yxis gxht"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 SECRET_KEY = 'django-insecure-n49tx0=5!zs^1s$$rp0(plkgw$xy_i@6b5*$kq!gmd6tkuwh6a'
 DEBUG = True
 ALLOWED_HOSTS = []

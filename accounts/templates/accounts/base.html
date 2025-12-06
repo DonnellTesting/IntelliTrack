@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}IntelliTrack{% endblock %}</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #1F2A37;
+        color: white;
+    }
+
+    .container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .card {
+        padding: 40px 35px;
+        border-radius: 18px;
+        max-width: 420px;
+        width: 100%;
+    }
+
+    .home-logo {
+        display: block;
+        margin: 0 auto 25px;
+        width: 120px;
+    }
+
+    .home-logo img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 12px;
+        color: white;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        opacity: 0.9;
+        margin-bottom: 25px;
+        color: white;
+    }
+
+    .input-group {
+        margin-bottom: 18px;
+        display: flex;
+        flex-direction: column;
+        color: white;
+    }
+
+    label {
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #cfd8e3;
+    }
+
+    input, select {
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        background: #273849;
+        color: white;
+    }
+
+    input::placeholder {
+        color: #b0b8c1;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 14px;
+        background-color: #3B82F6;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 5px;
+    }
+
+    .btn:hover {
+        background-color: #2563eb;
+    }
+
+    .footer-text {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    .footer-text a {
+        color: #60A5FA;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .footer-text a:hover {
+        text-decoration: underline;
+    }
+
+    .forgot {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .forgot a {
+        color: #60A5FA;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .forgot a:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <a href="/" class="home-logo">
+            <img src="{% static 'accounts/resources/logo.png' %}" alt="IntelliTrack Logo" />
+        </a>
+
+        {% block content %}
+        <!-- Individual page content goes here -->
+        {% endblock %}
+
+        {% block footer %}
+        <div class="footer-text">
+            Don't have an account? 
+            <h5>Contact the PRMSU IntelliTrack administrator (prmsuintellitrack@gmail.com) to start.</h5>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+
+</body>
+</html>
