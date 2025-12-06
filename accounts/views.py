@@ -3,6 +3,10 @@ from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 
 def logout_user(request):
     logout(request)
@@ -20,8 +24,40 @@ def forgot_password(request):
 def reset_password(request):
     return render(request, 'accounts/reset_password.html')
 
+@login_required
 def profile_page(request):
-    return render(request, 'accounts/profile_page.html')
+    user = request.user
+
+    # Map roles to their dashboards
+    role_redirects = {
+        "student": "/student/",
+        "instructor": "/instructor/",
+        "company": "/company/",
+        "admin": "/admin/",
+    }
+
+    back_url = role_redirects.get(user.role, "/")  # fallback = home
+
+    return render(request, "accounts/profile_page.html", {
+        "back_url": back_url
+    })
+
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # keeps user logged in
+            messages.success(request, "Your password was updated successfully!")
+            return redirect("profile")  # back to profile page
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, "accounts/change_password.html", {
+        "form": form
+    })
 
 # app/views.py
 @csrf_exempt 

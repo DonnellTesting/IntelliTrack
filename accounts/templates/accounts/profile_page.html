@@ -69,11 +69,29 @@
         .btn:hover {
             background: #1D4ED8;
         }
+
+        .home-logo {
+        display: block;
+        margin: 0 auto 25px;
+        width: 120px;
+        }
+
+        .home-logo img {
+        width: 100%;
+        height: auto;
+        display: block;
+        }
+
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- Logo Section -->
+    <a href="{{ back_url }}" class="home-logo">
+            <img src="{% static 'accounts/resources/logo.png' %}" alt="IntelliTrack Logo" />
+    </a>
+
     <h1>My Profile</h1>
 
     <div class="field">
@@ -97,7 +115,8 @@
     </div>
 
     <div class="buttons">
-        <a href="/accounts/change-password/" class="btn">Change Password</a>
+        <a href="{{ back_url }}" class="btn" style="background:#6B7280;">Back</a>
+        <a href="{% url 'change_password' %}" class="btn">Change Password</a>
         <a href="/logout/" class="btn" style="background:#EF4444;">Logout</a>
     </div>
 </div>
