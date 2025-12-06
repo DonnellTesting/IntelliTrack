@@ -1,44 +1,84 @@
-{% extends "teacher/base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Class</title>
+    <style>
+        body { background:#1F2A37; color:white; font-family:Arial; padding:40px; }
+        table { width:100%; border-collapse: collapse; margin-top:20px; cursor:pointer; }
+        th, td { padding:10px; border-bottom:1px solid #374151; text-align:left; }
+        th { background:#111827; }
+        th:hover { background:#0F172A; }
+    </style>
 
-{% block content %}
-<div class="page-header">
-    <h1>{{ class_obj.name }}</h1>
-    <p>Instructor: {{ request.user.first_name }} {{ request.user.last_name }}</p>
-</div>
+    <script>
+        // Simple table sorter
+        function sortTable(n) {
+            let table = document.getElementById("placementTable");
+            let switching = true, dir = "asc", switchcount = 0;
 
-<hr>
+            while (switching) {
+                switching = false;
+                let rows = table.rows;
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Student Name</th>
-            <th>OJT Placement</th>
-            <th>Hours Completed</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for student in students %}
-        <tr>
-            <td>{{ student.first_name }} {{ student.last_name }}</td>
+                for (let i = 1; i < rows.length - 1; i++) {
+                    let shouldSwitch = false;
+                    let x = rows[i].getElementsByTagName("TD")[n];
+                    let y = rows[i + 1].getElementsByTagName("TD")[n];
 
-            <!-- Placeholder -->
-            <td><em>Not assigned yet</em></td>
+                    let cmpX = x.innerText.toLowerCase();
+                    let cmpY = y.innerText.toLowerCase();
 
-            <!-- Future progress bar -->
-            <td>
-                <div style="width: 200px; background: #ddd; height: 10px; border-radius: 5px;">
-                    <div style="width: 0%; height: 10px; background: #4CAF50; border-radius: 5px;"></div>
-                </div>
-                <small>0 / 600 hrs</small>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="3" style="text-align:center; padding: 20px;">
-                No students assigned to this class yet.
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% endblock %}
+                    if (dir === "asc" && cmpX > cmpY) shouldSwitch = true;
+                    else if (dir === "desc" && cmpX < cmpY) shouldSwitch = true;
+
+                    if (shouldSwitch) {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                        switchcount++;
+                        break;
+                    }
+                }
+
+                if (switchcount === 0 && dir === "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Your Class</h1>
+
+    {% if placements %}
+        <table id="placementTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Student</th>
+                    <th onclick="sortTable(1)">Batch Year</th>
+                    <th onclick="sortTable(2)">Company</th>
+                    <th onclick="sortTable(3)">Supervisor</th>
+                    <th onclick="sortTable(4)">Start</th>
+                    <th onclick="sortTable(5)">End</th>
+                    <th onclick="sortTable(6)">Target Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in placements %}
+                <tr>
+                    <td>{{ p.student.get_full_name }}</td>
+                    <td>{{ p.batch_year|default:"-" }}</td>
+                    <td>{{ p.company_name|default:"No company" }}</td>
+                    <td>{{ p.supervisor.get_full_name|default:"None" }}</td>
+                    <td>{{ p.start_date|default:"-" }}</td>
+                    <td>{{ p.end_date|default:"-" }}</td>
+                    <td>{{ p.target_hours }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No placements found.</p>
+    {% endif %}
+</body>
+</html>

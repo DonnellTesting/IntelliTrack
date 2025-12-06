@@ -1,13 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Instructor Placements</title>
+    <title>OJT Placement by Company</title>
     <style>
         body { background:#1F2A37; color:white; font-family:Arial; padding:40px; }
+        table { width:100%; border-collapse:collapse; margin-top:20px; }
+        th, td { padding:10px; border-bottom:1px solid #374151; }
+        th { background:#111827; text-align:left; }
     </style>
 </head>
 <body>
-    <h1>OJT Placements</h1>
-    <p>Placeholder — approved or pending company placements will appear here.</p>
+    <h1>OJT Placement by Company</h1>
+
+    {% if placements %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Student</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in placements %}
+                <tr>
+                    <td>{{ p.company_name|default:"No company assigned" }}</td>
+                    <td>{{ p.student.get_full_name }}</td>
+                    <td>{{ p.start_date|default:"-" }}</td>
+                    <td>{{ p.end_date|default:"-" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No placements available.</p>
+    {% endif %}
 </body>
 </html>
