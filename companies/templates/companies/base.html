@@ -198,8 +198,11 @@
 
     <!-- MAIN CONTENT -->
     <div class="content-area">
+        {% block content %}
+        <!-- Default content (optional) -->
         <h1>Welcome, Supervisor!</h1>
         <p>Manage supervised students, sign timesheets, and evaluate performance.</p>
+        {% endblock %}
     </div>
 
 </body>
