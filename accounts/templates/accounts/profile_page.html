@@ -82,6 +82,13 @@
         display: block;
         }
 
+        .footer-text {
+        margin-top: 18px;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0.8;
+        }
+
     </style>
 </head>
 <body>
@@ -112,6 +119,10 @@
     <div class="field">
         <div class="label">Role</div>
         <div class="value">{{ request.user.role|title }}</div>
+    </div>
+
+    <div class="footer-text">
+        <h5>Profile Changes are sensitive. Contact the PRMSU Intellitrack adminstrator for any changes. </h5>
     </div>
 
     <div class="buttons">
