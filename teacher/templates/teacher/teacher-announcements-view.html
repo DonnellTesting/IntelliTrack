@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>View Announcements</title>
-    <style>
-        body { background:#1F2A37; color:white; font-family:Arial; padding:40px; }
-    </style>
-</head>
-<body>
-    <h1>View Announcements</h1>
-    <p>Placeholder — all announcements will be listed here.</p>
-</body>
-</html>
+{% extends "teacher/base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ class_obj.name }}</h1>
+    <p>View Announcements Page</p>
+</div>
+
+{% endblock %}

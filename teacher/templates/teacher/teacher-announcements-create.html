@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Create Announcements</title>
-    <style>
-        body { background:#1F2A37; color:white; font-family:Arial; padding:40px; }
-    </style>
-</head>
-<body>
-    <h1>Create Announcement</h1>
-    <p>This will later contain a form to post announcements.</p>
-</body>
-</html>
+{% extends "teacher/base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ class_obj.name }}</h1>
+    <p>Create Announcements Page</p>
+</div>
+
+{% endblock %}
