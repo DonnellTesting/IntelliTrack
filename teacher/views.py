@@ -38,7 +38,6 @@ def instructor_class_list(request):
         "placements": placements
     })
 
-# Other Views
 @role_required(['instructor'])
 def instructor_timesheets(request):
     return render(request, "teacher/teacher-timesheets.html")

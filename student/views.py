@@ -2,6 +2,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ojt_tracker.decorators import role_required
+from student.models import OJTPlacement
+from accounts.models import Announcement
+from django.utils import timezone
 
 @role_required(['student'])
 def dashboard(request):
@@ -21,4 +24,13 @@ def student_placement(request):
 
 @role_required(['student'])
 def student_announcements(request):
-    return render(request, "student/student-announcements.html")
+    announcements = Announcement.objects.filter(
+        visible_to_all=True
+    ).order_by('-created_at')
+
+    today = timezone.localdate()
+
+    return render(request, "student/student-announcements.html", {
+        'announcements': announcements,
+        'today': today,
+    })
