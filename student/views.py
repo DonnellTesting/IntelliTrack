@@ -11,6 +11,18 @@ def dashboard(request):
     return render(request, 'student/student-dashboard.html')
 
 @role_required(['student'])
+def student_class(request):
+    placements = (
+        OJTPlacement.objects
+        .select_related("student")
+        .order_by("company_name", "student__last_name", "student__first_name")
+    )
+
+    return render(request, "student/student-class.html", {
+        "placements": placements
+    })
+
+@role_required(['student'])
 def student_timesheet(request):
     return render(request, "student/student-timesheet.html")
 
