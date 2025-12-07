@@ -16,4 +16,5 @@ urlpatterns = [
     # Announcements
     path('announcements/create/', views.instructor_announcement_create, name='instructor_announcement_create'),
     path('announcements/view/', views.instructor_announcement_list, name='instructor_announcement_list'),
+    path('announcements/delete/<int:pk>/', views.instructor_announcement_delete, name='instructor_announcement_delete'),
 ]

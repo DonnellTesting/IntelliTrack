@@ -2,8 +2,132 @@
 
 {% block content %}
 <div class="page-header">
-    <h1>{{ class_obj.name }}</h1>
-    <p>View Announcements Page</p>
+    <h1>Announcements</h1>
+    <p>All visible announcements are shown here.</p>
 </div>
+
+<div class="announcements-wrapper">
+    {% if announcements %}
+        {% for ann in announcements %}
+            <div class="announcement-card {% if ann.created_at.date == today %}announcement-today{% endif %}">
+                
+                {# DELETE BUTTON visible only for the author or admin; uses POST for safety #}
+                {% if ann.author == request.user or request.user.is_superuser %}
+                <form method="post" action="{% url 'instructor_announcement_delete' ann.id %}" class="delete-form" onsubmit="return confirm('Delete this announcement?');">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn" aria-label="Delete announcement">✖</button>
+                </form>
+                {% endif %}
+
+                <h2 class="announcement-title">{{ ann.title }}</h2>
+
+                <p class="announcement-meta">
+                    Posted by 
+                    <strong>{{ ann.author.get_full_name|default:ann.author.username }}</strong>
+                    — {{ ann.created_at|date:"M d, Y h:i A" }}
+                </p>
+
+                <p class="announcement-content">{{ ann.content }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No announcements available.</p>
+    {% endif %}
+</div>
+
+<style>
+    .page-header h1 {
+        margin-bottom: 5px;
+    }
+
+    .page-header p {
+        opacity: 0.8;
+        margin-top: 0;
+    }
+
+    .announcements-wrapper {
+        margin-top: 25px;
+    }
+
+    .announcement-card {
+        position: relative; /* REQUIRED for delete button positioning */
+        background: #273849;
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        transition: 0.3s ease;
+    }
+
+    /* Highlight announcements made today */
+    .announcement-today {
+        background: #32495d !important;
+        border-left: 4px solid #4da6ff;
+        box-shadow: 0 0 10px rgba(77,166,255,0.4);
+    }
+
+    /* DELETE BUTTON */
+    .delete-btn {
+        position: absolute;
+        top: 10px;
+        right: 12px;
+        font-size: 18px;
+        text-decoration: none;
+        color: #ff8080;
+        opacity: 0.8;
+        transition: 0.2s;
+    }
+
+    .delete-btn:hover {
+        opacity: 1;
+        color: #ff4d4d;
+    }
+
+    .announcement-title {
+        margin: 0;
+        font-size: 22px;
+        color: #ffffff;
+        font-weight: 700;
+    }
+
+    .announcement-meta {
+        margin-top: 8px;
+        font-size: 13px;
+        opacity: 0.8;
+        margin-bottom: 15px;
+    }
+
+    .announcement-content {
+        line-height: 1.6;
+        color: #eaeff5;
+    }
+
+    /* make the form sit in the top-right of the card */
+    .delete-form {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: none;
+    }
+
+    /* keep your delete-btn style; make it look good inside the tiny form */
+    .delete-btn {
+        font-size: 18px;
+        line-height: 1;
+        padding: 4px 6px;
+        border-radius: 4px;
+        border: none;
+        background: transparent;
+        color: #ff8080;
+        cursor: pointer;
+        opacity: 0.9;
+    }
+    .delete-btn:hover { color: #ff4d4d; opacity: 1; }
+
+</style>
 
 {% endblock %}
