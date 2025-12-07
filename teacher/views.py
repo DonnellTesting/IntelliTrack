@@ -83,11 +83,11 @@ def instructor_announcement_delete(request, pk):
     # Only allow author OR admin/superuser
     if request.user != ann.author and not request.user.is_superuser:
         messages.error(request, "You cannot delete this announcement.")
-        return redirect("instructor_announcement_list")
+        return redirect("/instructor/announcements/view")
 
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"])
 
     ann.delete()
     messages.success(request, "Announcement deleted successfully.")
-    return redirect("instructor_announcement_list")
+    return redirect("/instructor/announcements/view")

@@ -1,6 +1,124 @@
 {% extends "companies/base.html" %}
 
 {% block content %}
-    <h1>Company Create Announcements</h1>
+<div class="create-announcement-page" role="main">
+    <h1>Create Announcement</h1>
+    <p>Write an announcement for your students and supervisors.</p>
 
+    <div class="form-wrap">
+        <form method="POST" class="announcement-form">
+            {% csrf_token %}
+
+            <label for="{{ form.title.id_for_label }}">Title</label>
+            {{ form.title }}
+
+            <label for="{{ form.content.id_for_label }}">Content</label>
+            {{ form.content }}
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">Post Announcement</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+/* ---- Page & layout helpers ----
+   Important: teacher/base.html already makes a two-column layout and provides
+   .content-area as the flexible right-hand column (it uses flex:1).
+   We rely on that: inside .content-area we make our page a column and let the
+   form stretch. */
+.create-announcement-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;         /* inherit available height from .content-area */
+    gap: 18px;
+}
+
+/* form container: allow the form to expand inside the content area */
+.form-wrap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;              /* take remaining vertical space under the header */
+    min-height: 0;        /* critical for children to be able to shrink/grow properly */
+}
+
+/* the form itself is a column; we let it fill the container */
+form.announcement-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 900px;     /* controls max width of the form */
+    border: 1px solid rgba(255,255,255,0.06);
+    background: #273849;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    /* make the form fill available vertical space so a child can flex */
+    flex: 1;
+    min-height: 0;        /* allow the textarea to shrink/grow inside flex */
+}
+
+/* sensible form field defaults */
+form.announcement-form input,
+form.announcement-form textarea,
+form.announcement-form select {
+    width: 97%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    background: #1F2A37;
+    color: white;
+    font-size: 15px;
+}
+
+/* make the content textarea expand to take leftover space */
+form.announcement-form textarea {
+    /* target the textarea widget rendered by {{ form.content }} */
+    flex: 1;              /* <-- this makes it grow to fill the remaining vertical space */
+    min-height: 140px;    /* baseline for very short screens */
+    resize: vertical;     /* allow user to resize vertically if they want */
+}
+
+/* keep the title input compact (don't let it grow) */
+form.announcement-form input[type="text"],
+form.announcement-form input:not([type]) {
+    flex: 0 0 auto;
+}
+
+/* action row stays at bottom and does not grow */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+/* button styles */
+.submit-btn {
+    padding: 10px 14px;
+    background: #1F2A37;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+.submit-btn:hover { background: #0F172A; }
+
+/* small accessibility / spacing niceties */
+label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #e6eef7;
+}
+
+/* ensure inner flex children can actually overflow if content is large */
+.form-wrap, form.announcement-form {
+    min-width: 0;
+}
+</style>
 {% endblock %}
