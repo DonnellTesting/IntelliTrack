@@ -1,6 +1,72 @@
 {% extends "companies/base.html" %}
 
 {% block content %}
-    <h1>Your Students</h1>
+<h1>My Assigned Students</h1>
+<p>These are the students currently assigned under your supervision.</p>
+
+<div class="students-wrapper">
+    {% if placements %}
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Company</th>
+                    <th>Batch</th>
+                    <th>Start Date</th>
+                    <th>Target Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in placements %}
+                    <tr>
+                        <td>{{ p.student.get_full_name }}</td>
+                        <td>{{ p.company_name|default:"N/A" }}</td>
+                        <td>{{ p.batch_year|default:"-" }}</td>
+                        <td>{{ p.start_date|date:"M d, Y" }}</td>
+                        <td>{{ p.target_hours }} hrs</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students assigned to you yet.</p>
+    {% endif %}
+</div>
+
+<style>
+    h1 {
+        margin-bottom: 5px;
+    }
+    p {
+        opacity: 0.8;
+        margin-top: 0;
+    }
+    .students-wrapper {
+        margin-top: 20px;
+    }
+    .students-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: #273849;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .students-table th, .students-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .students-table th {
+        background: #32495d;
+        font-weight: bold;
+        color: #fff;
+    }
+    .students-table td {
+        color: #eaeff5;
+    }
+    .students-table tr:last-child td {
+        border-bottom: none;
+    }
+</style>
 
 {% endblock %}

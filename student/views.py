@@ -20,7 +20,12 @@ def student_performance(request):
 
 @role_required(['student'])
 def student_placement(request):
-    return render(request, "student/student-placement.html")
+
+    placement = getattr(request.user, "ojt_placement", None)
+
+    return render(request, "student/student-placement.html", {
+        "placement": placement
+    })
 
 @role_required(['student'])
 def student_announcements(request):

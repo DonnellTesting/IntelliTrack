@@ -1,6 +1,72 @@
 {% extends "student/base.html" %}
 
 {% block content %}
-    <h1>Students Placements Page</h1>
+<h1>My OJT Placement</h1>
+<p>Your current OJT assignment details are shown below.</p>
+
+{% if placement %}
+<div class="placement-card">
+    <h2>{{ placement.company_name|default:"Not assigned yet" }}</h2>
+
+    <p><strong>Supervisor:</strong>
+       {{ placement.supervisor.get_full_name|default:"No supervisor assigned" }}
+    </p>
+
+    <p><strong>Batch Year:</strong>
+       {{ placement.batch_year|default:"N/A" }}
+    </p>
+
+    <p><strong>Start Date:</strong>
+       {{ placement.start_date|date:"M d, Y" }}
+    </p>
+
+    <p><strong>End Date:</strong>
+       {{ placement.end_date|date:"M d, Y" }}
+    </p>
+
+    <p><strong>Target Hours:</strong>
+       {{ placement.target_hours }} hours
+    </p>
+
+    <p><strong>Notes:</strong><br>
+       {{ placement.notes|default:"No notes provided." }}
+    </p>
+</div>
+
+{% else %}
+<div class="placement-card">
+
+    <p><strong>You have not been assigned an OJT placement yet. Please contact your Instructor and Administrator.</strong> </p>
+
+</div>
+{% endif %}
+
+<style>
+    h1 {
+        margin-bottom: 5px;
+    }
+    p {
+        opacity: 0.9;
+    }
+    .placement-card {
+        background: #273849;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        width: 95%;
+        margin-top: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+    .placement-card h2 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: #fff;
+    }
+    .placement-card p {
+        color: #dde6ef;
+        line-height: 1.5;
+        margin: 8px 0;
+    }
+</style>
 
 {% endblock %}

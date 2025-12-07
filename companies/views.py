@@ -14,9 +14,17 @@ from django.http import HttpResponseNotAllowed
 def dashboard(request):
     return render(request, 'companies/supervisor-dashboard.html')
 
-@role_required(['company'])
+@role_required(['company'])   # Only company supervisors can access
 def supervisor_students(request):
-    return render(request, "companies/supervisor-students.html")
+
+    # Get all students supervised by this logged-in company supervisor
+    placements = request.user.supervised_students.select_related(
+        "student"
+    ).order_by("student__last_name", "student__first_name")
+
+    return render(request, "companies/supervisor-students.html", {
+        "placements": placements
+    })
 
 @role_required(['company'])
 def supervisor_timesheets(request):
@@ -25,14 +33,6 @@ def supervisor_timesheets(request):
 @role_required(['company'])
 def supervisor_performance(request):
     return render(request, "companies/supervisor-performance.html")
-
-# @role_required(['company'])
-# def supervisor_ann_create(request):
-#     return render(request, "companies/supervisor-announcements-create.html")
-
-# @role_required(['company'])
-# def supervisor_ann_view(request):
-#     return render(request, "companies/supervisor-announcements-view.html")
 
 @role_required(['company'])
 def supervisor_ann_create(request):
