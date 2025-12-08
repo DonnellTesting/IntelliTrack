@@ -1,0 +1,87 @@
+{% extends "companies/base.html" %}
+{% block content %}
+
+<h1>{{ placement.student.get_full_name }} – Calendar View</h1>
+<p>Company: {{ placement.company_name }}</p>
+<p>Batch: {{ placement.batch_year }}</p>
+
+<button class="primary-btn" onclick="location.href='{% url 'supervisor_timesheets_view' placement.id %}'">
+    Switch to Table View
+</button>
+
+<hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
+
+<div class="calendar-container">
+    {% for month in months %}
+        <h2>{{ month.name }} 2026</h2>
+
+        <div class="calendar-grid weekdays">
+            <div class="calendar-day weekday">Sun</div>
+            <div class="calendar-day weekday">Mon</div>
+            <div class="calendar-day weekday">Tue</div>
+            <div class="calendar-day weekday">Wed</div>
+            <div class="calendar-day weekday">Thu</div>
+            <div class="calendar-day weekday">Fri</div>
+            <div class="calendar-day weekday">Sat</div>
+        </div>
+
+        <div class="calendar-grid">
+            {% for day in month.days %}
+                <div class="calendar-day {% if day.month != month.number %}other-month{% endif %}">
+                    {{ day.day }}
+                </div>
+            {% endfor %}
+        </div>
+        <br>
+    {% endfor %}
+</div>
+
+
+<style>
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    background: #273849;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.primary-btn {
+    background: #00bcd4;
+    padding: 12px 20px;
+    color: #1F2A37;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.primary-btn:hover {
+    background: #0097a7;
+}
+
+.calendar-day.other-month {
+    background: #1F2A37;
+    opacity: 0.5;
+}
+
+.calendar-grid.weekdays {
+    margin-bottom: 5px;
+}
+
+.calendar-day.weekday {
+    background: #1F2A37; /* darker header style */
+    font-weight: bold;
+    box-shadow: none;
+}
+
+</style>
+
+{% endblock %}

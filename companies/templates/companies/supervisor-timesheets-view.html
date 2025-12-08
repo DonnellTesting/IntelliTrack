@@ -5,31 +5,13 @@
 <p>Company: {{ placement.company_name }}</p>
 <p>Batch: {{ placement.batch_year }}</p>
 
-<hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
-
 <!-- CALENDAR WRAPPER -->
-<div class="calendar-container">
-    <h2>Calendar View</h2>
+<button class="primary-btn" style="margin-bottom: 20px;" 
+        onclick="location.href='{% url 'supervisor_timesheets_calendar' placement.id %}'">
+    Switch to Calendar View
+</button>
 
-    <div class="calendar-grid">
-        {% for day in logs %}
-            <div class="calendar-day">
-                <div class="date-label">{{ day.date }}</div>
-                <div class="hours">
-                    <strong>Hours:</strong> {{ day.hours_worked }}
-                </div>
-                <div class="rating">
-                    <strong>Rating:</strong> {{ day.performance_rating }}/5
-                </div>
-                {% if day.remarks %}
-                    <div class="remarks">“{{ day.remarks }}”</div>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p>No logs available yet.</p>
-        {% endfor %}
-    </div>
-</div>
+<hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
 
 <br><br>
 
@@ -42,7 +24,7 @@
             <th>Hours</th>
             <th>Rating</th>
             <th>Remarks</th>
-            <th>Action</th> <!-- New column -->
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>

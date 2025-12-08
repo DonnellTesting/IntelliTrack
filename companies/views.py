@@ -11,6 +11,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.http import HttpResponseNotAllowed
 from django.http import HttpResponseForbidden
+from datetime import date
+import calendar
 
 @role_required(['company'])
 def dashboard(request):
@@ -113,6 +115,29 @@ def supervisor_timesheets_view(request, placement_id):
     return render(request, "companies/supervisor-timesheets-view.html", {
         "placement": placement,
         "logs": logs,
+    })
+
+@role_required(['company'])
+def supervisor_timesheets_calendar(request, placement_id):
+    placement = get_object_or_404(OJTPlacement, id=placement_id)
+    logs = OJTProgress.objects.filter(placement=placement)
+    log_dates = {log.date for log in logs}
+
+    months = []
+    for month_num in range(1, 7):
+        cal = calendar.Calendar(firstweekday=6)  # Sunday start
+        month_days = list(cal.itermonthdates(2026, month_num))
+        months.append({
+            'name': calendar.month_name[month_num],
+            'days': month_days,
+            'number': month_num
+        })
+
+    return render(request, 'companies/supervisor-timesheets-calendar.html', {
+        'placement': placement,
+        'months': months,
+        'logs': logs,
+        'log_dates': log_dates
     })
 
 @role_required(['company'])
