@@ -1,7 +1,7 @@
 {% extends "companies/base.html" %}
 {% block content %}
 
-<h1>Modify Timesheet – {{ placement.student.get_full_name }}</h1>
+<h1>Sign Student Timesheet and Performance – {{ placement.student.get_full_name }}</h1>
 <p>Company: {{ placement.company_name }}</p>
 
 <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
@@ -10,10 +10,16 @@
     {% csrf_token %}
 
     <label>Date</label>
-    <input type="date" name="date" required>
+    <input type="date" name="date" id="date-field" required>
+
+    <button type="button" class="secondary-btn" 
+            style="margin-top: 5px; width: fit-content;"
+            onclick="document.getElementById('date-field').value = new Date().toISOString().split('T')[0];">
+        Select the Date Today
+    </button>
 
     <label>Hours Worked</label>
-    <input type="number" step="0.25" name="hours_worked" placeholder="e.g. 8.0" required>
+    <input type="number" step="0.25" name="hours_worked" placeholder="e.g. 8.0" min="0" max="12" required>
 
     <label>Performance Rating (1–5)</label>
     <select name="performance_rating" required>
@@ -24,15 +30,15 @@
     </select>
 
     <label>Remarks</label>
-    <textarea name="remarks" rows="4" placeholder="Optional notes..."></textarea>
+    <textarea name="remarks" rows="4" placeholder="Please let us know more about your rating."></textarea>
 
     <button class="primary-btn" type="submit">Save Entry</button>
 </form>
 
 <br>
 
-<button class="secondary-btn" onclick="location.href='{% url 'supervisor_timesheets_modify' placement.id %}'">
-    Back to Timesheet
+<button class="secondary-btn" onclick="location.href='{% url 'supervisor_timesheets_view' placement.id %}'">
+    View Student Timesheet
 </button>
 
 <style>
@@ -90,5 +96,11 @@
         background: #273849;
     }
 </style>
+
+{% if saved %}
+<script>
+    alert("Timesheet updated successfully!");
+</script>
+{% endif %}
 
 {% endblock %}

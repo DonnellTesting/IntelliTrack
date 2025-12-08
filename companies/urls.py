@@ -11,6 +11,7 @@ urlpatterns = [
     path('students/modify', views.supervisor_students_modify, name='supervisor_students_modify'),
     path('timesheets/modify/<placement_id>', views.supervisor_timesheets_modify, name='supervisor_timesheets_modify'),
     path('timesheets/view/<placement_id>', views.supervisor_timesheets_view, name='supervisor_timesheets_view'),
+    path('timesheets/delete/<log_id>', views.supervisor_timesheets_delete, name='supervisor_timesheets_delete'),
 
     # Announcements
     path('announcements/create/', views.supervisor_ann_create, name='supervisor_ann_create'),

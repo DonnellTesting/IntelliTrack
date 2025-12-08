@@ -57,8 +57,10 @@ def supervisor_timesheets_modify(request, placement_id):
     placement = get_object_or_404(
         OJTPlacement,
         id=placement_id,
-        supervisor=request.user  # ensures ownership
+        supervisor=request.user
     )
+
+    saved = False  # flag for template
 
     if request.method == "POST":
         date = request.POST.get("date")
@@ -66,7 +68,6 @@ def supervisor_timesheets_modify(request, placement_id):
         rating = request.POST.get("performance_rating")
         remarks = request.POST.get("remarks")
 
-        # Create or update unique (placement, date)
         progress, created = OJTProgress.objects.update_or_create(
             placement=placement,
             date=date,
@@ -78,12 +79,26 @@ def supervisor_timesheets_modify(request, placement_id):
             }
         )
 
-        messages.success(request, "Timesheet updated successfully.")
-        return redirect("supervisor_timesheet_detail", placement_id=placement.id)
+        saved = True  # set flag
+
+        # stay on the same page
+        return render(request, "companies/supervisor-timesheets-modify.html", {
+            "placement": placement,
+            "saved": saved
+        })
 
     return render(request, "companies/supervisor-timesheets-modify.html", {
         "placement": placement
     })
+
+def supervisor_timesheets_delete(request, log_id):
+
+    log = get_object_or_404(OJTProgress, id=log_id, supervisor=request.user)
+    placement_id = log.placement.id
+    log.delete()
+
+    messages.success(request, "Timesheet entry deleted successfully.")
+    return redirect('supervisor_timesheets_view', placement_id=placement_id)
 
 @role_required(['company'])
 def supervisor_timesheets_view(request, placement_id):
