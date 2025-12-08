@@ -10,13 +10,21 @@
     {% csrf_token %}
 
     <label>Date</label>
-    <input type="date" name="date" id="date-field" required>
+    <input 
+        type="date" 
+        name="date" 
+        id="date-field" 
+        required
+        min="2026-01-01"
+        max="2026-07-31"
+    >
 
     <button type="button" class="secondary-btn" 
             style="margin-top: 5px; width: fit-content;"
             onclick="document.getElementById('date-field').value = new Date().toISOString().split('T')[0];">
         Select the Date Today
     </button>
+
 
     <label>Hours Worked</label>
     <input type="number" step="0.25" name="hours_worked" placeholder="e.g. 8.0" min="0" max="12" required>
