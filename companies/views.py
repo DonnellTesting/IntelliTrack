@@ -122,6 +122,7 @@ def supervisor_timesheets_calendar(request, placement_id):
     placement = get_object_or_404(OJTPlacement, id=placement_id)
     logs = OJTProgress.objects.filter(placement=placement)
     log_dates = {log.date for log in logs}
+    logs_dict = {log.date: log for log in logs}  # <-- mapping date -> log
 
     months = []
     for month_num in range(1, 7):
@@ -136,8 +137,8 @@ def supervisor_timesheets_calendar(request, placement_id):
     return render(request, 'companies/supervisor-timesheets-calendar.html', {
         'placement': placement,
         'months': months,
-        'logs': logs,
-        'log_dates': log_dates
+        'log_dates': log_dates,
+        'logs_dict': logs_dict,  # pass it to template
     })
 
 @role_required(['company'])

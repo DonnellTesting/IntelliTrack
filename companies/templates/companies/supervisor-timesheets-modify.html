@@ -9,35 +9,35 @@
 <form method="POST" class="timesheet-form">
     {% csrf_token %}
 
-    <label>Date</label>
+    <label>Date 📅</label>
     <input 
         type="date" 
         name="date" 
         id="date-field" 
         required
         min="2026-01-01"
-        max="2026-07-31"
+        max="2026-06-31"
     >
 
     <button type="button" class="secondary-btn" 
             style="margin-top: 5px; width: fit-content;"
             onclick="document.getElementById('date-field').value = new Date().toISOString().split('T')[0];">
-        Select the Date Today
+        Select the Date Today 
     </button>
 
 
-    <label>Hours Worked</label>
+    <label>Hours Worked 🕐</label>
     <input type="number" step="0.25" name="hours_worked" placeholder="e.g. 8.0" min="0" max="12" required>
 
     <label>Performance Rating (1–5)</label>
     <select name="performance_rating" required>
-        <option value="">Select rating</option>
+        <option value="">Select rating ⭐️</option>
         {% for i in "12345" %}
             <option value="{{ i }}">{{ i }}</option>
         {% endfor %}
     </select>
 
-    <label>Remarks</label>
+    <label>Remarks 💭</label>
     <textarea name="remarks" rows="4" placeholder="Please let us know more about your rating."></textarea>
 
     <button class="primary-btn" type="submit">Save Entry</button>
@@ -77,9 +77,9 @@
     }
 
     .primary-btn {
-        background: #00bcd4;
+        background: #4caf50;
         padding: 12px 20px;
-        color: #1F2A37;
+        color: #ffffffff;
         font-weight: bold;
         border: none;
         border-radius: 6px;
@@ -88,7 +88,7 @@
     }
 
     .primary-btn:hover {
-        background: #0097a7;
+        background: #45a049;
     }
 
     .secondary-btn {
