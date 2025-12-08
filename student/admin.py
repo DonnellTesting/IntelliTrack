@@ -21,4 +21,14 @@ class OJTPlacementAdmin(admin.ModelAdmin):
 class OJTProgressAdmin(admin.ModelAdmin):
     list_display = ("ojt", "date", "hours_worked", "performance_rating")
     list_filter = ("date", "performance_rating")
-    search_fields = ("ojt__student__first_name", "ojt__student__last_name")
+    search_fields = (
+        "placement__student__first_name",
+        "placement__student__last_name",
+        "placement__company_name",
+    )
+
+    def ojt(self, obj):
+        """Return the placement field, but labeled as 'OJT' in the admin."""
+        return obj.placement
+
+    ojt.short_description = "OJT Placement"

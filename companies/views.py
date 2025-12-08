@@ -3,12 +3,14 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ojt_tracker.decorators import role_required
 from student.models import OJTPlacement
+from student.models import OJTProgress
 from accounts.models import Announcement
 from accounts.forms import AnnouncementForm
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseForbidden
 
 @role_required(['company'])
 def dashboard(request):
@@ -27,12 +29,52 @@ def supervisor_students(request):
     })
 
 @role_required(['company'])
-def supervisor_timesheets(request):
-    return render(request, "companies/supervisor-timesheets.html")
+def supervisor_timesheets_modify(request, placement_id):
+    placement = get_object_or_404(
+        OJTPlacement,
+        id=placement_id,
+        supervisor=request.user  # ensures ownership
+    )
+
+    if request.method == "POST":
+        date = request.POST.get("date")
+        hours = request.POST.get("hours_worked")
+        rating = request.POST.get("performance_rating")
+        remarks = request.POST.get("remarks")
+
+        # Create or update unique (placement, date)
+        progress, created = OJTProgress.objects.update_or_create(
+            placement=placement,
+            date=date,
+            defaults={
+                "hours_worked": hours,
+                "performance_rating": rating,
+                "remarks": remarks,
+                "supervisor": request.user,
+            }
+        )
+
+        messages.success(request, "Timesheet updated successfully.")
+        return redirect("supervisor_timesheet_detail", placement_id=placement.id)
+
+    return render(request, "companies/supervisor-timesheets-modify.html", {
+        "placement": placement
+    })
 
 @role_required(['company'])
-def supervisor_performance(request):
-    return render(request, "companies/supervisor-performance.html")
+def supervisor_timesheets_view(request, placement_id):
+    placement = get_object_or_404(
+        OJTPlacement,
+        id=placement_id,
+        supervisor=request.user  # Extra safety
+    )
+
+    logs = placement.progress_logs.all()
+
+    return render(request, "companies/supervisor-timesheets-view.html", {
+        "placement": placement,
+        "logs": logs,
+    })
 
 @role_required(['company'])
 def supervisor_ann_create(request):

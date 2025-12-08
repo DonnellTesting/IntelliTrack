@@ -14,17 +14,23 @@
                     <th>Batch</th>
                     <th>Start Date</th>
                     <th>Target Hours</th>
+                    <th> </th>
+                    <th> </th>
                 </tr>
             </thead>
             <tbody>
                 {% for p in placements %}
-                    <tr>
-                        <td>{{ p.student.get_full_name }}</td>
-                        <td>{{ p.company_name|default:"N/A" }}</td>
-                        <td>{{ p.batch_year|default:"-" }}</td>
-                        <td>{{ p.start_date|date:"M d, Y" }}</td>
-                        <td>{{ p.target_hours }} hrs</td>
-                    </tr>
+                <tr>
+                    <td>{{ p.student.get_full_name }}</td>
+                    <td>{{ p.company_name|default:"N/A" }}</td>
+                    <td>{{ p.batch_year|default:"-" }}</td>
+                    <td>{{ p.start_date|date:"M d, Y" }}</td>
+                    <td>{{ p.target_hours }} hrs</td>
+                    <td>
+                        <a href="{% url 'supervisor_timesheets_modify' p.id %}" class="btn btn-modify">Modify</a>
+                        <a href="{% url 'supervisor_timesheets_view' p.id %}" class="btn btn-view">View</a>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -68,6 +74,42 @@
     .students-table tr:last-child td {
         border-bottom: none;
     }
+    .btn {
+        padding: 6px 12px;
+        margin-right: 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        color: #fff;
+        transition: background 0.2s;
+    }
+
+    .btn-modify {
+        background: #4caf50;
+    }
+
+    .btn-modify:hover {
+        background: #45a049;
+    }
+
+    .btn-view {
+        background: #2196f3;
+    }
+
+    .btn-view:hover {
+        background: #0b7dda;
+    }
+
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".clickable-row").forEach(row => {
+        row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+        });
+    });
+});
+</script>
 
 {% endblock %}

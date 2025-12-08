@@ -7,8 +7,8 @@ urlpatterns = [
 
     # Management
     path('students/', views.supervisor_students, name='supervisor_students'),
-    path('timesheets/', views.supervisor_timesheets, name='supervisor_timesheets'),
-    path('performance/', views.supervisor_performance, name='supervisor_performance'),
+    path('timesheets/modify/<placement_id>', views.supervisor_timesheets_modify, name='supervisor_timesheets_modify'),
+    path('timesheets/view/<placement_id>', views.supervisor_timesheets_view, name='supervisor_timesheets_view'),
 
     # Announcements
     path('announcements/create/', views.supervisor_ann_create, name='supervisor_ann_create'),

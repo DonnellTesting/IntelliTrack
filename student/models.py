@@ -42,21 +42,22 @@ class OJTPlacement(models.Model):
 
 
 class OJTProgress(models.Model):
-    ojt = models.ForeignKey(
+    placement = models.ForeignKey(
         OJTPlacement,
         on_delete=models.CASCADE,
-        related_name="progress_entries"
+        related_name='progress_logs'
+    )
+    date = models.DateField()
+    hours_worked = models.DecimalField(max_digits=4, decimal_places=2)
+    performance_rating = models.IntegerField()
+    remarks = models.TextField(blank=True, null=True)
+    supervisor = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        limit_choices_to={'role': 'supervisor'}
     )
 
-    date = models.DateField()
-
-    hours_worked = models.DecimalField(max_digits=4, decimal_places=2, default=0)
-    performance_rating = models.IntegerField(default=0)  # 1–10 rating
-
-    remarks = models.TextField(blank=True, null=True)
-
     class Meta:
-        unique_together = ('ojt', 'date')  # One entry per day
-
-    def __str__(self):
-        return f"{self.ojt.student.get_full_name()} - {self.date}"
+        unique_together = ('placement', 'date')
+        ordering = ['-date']
