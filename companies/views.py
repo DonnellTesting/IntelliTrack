@@ -28,6 +28,30 @@ def supervisor_students(request):
         "placements": placements
     })
 
+@role_required(['company'])   # Only company supervisors can access
+def supervisor_students_view(request):
+
+    # Get all students supervised by this logged-in company supervisor
+    placements = request.user.supervised_students.select_related(
+        "student"
+    ).order_by("student__last_name", "student__first_name")
+
+    return render(request, "companies/supervisor-students-view.html", {
+        "placements": placements
+    })
+
+@role_required(['company'])   # Only company supervisors can access
+def supervisor_students_modify(request):
+
+    # Get all students supervised by this logged-in company supervisor
+    placements = request.user.supervised_students.select_related(
+        "student"
+    ).order_by("student__last_name", "student__first_name")
+
+    return render(request, "companies/supervisor-students-modify.html", {
+        "placements": placements
+    })
+
 @role_required(['company'])
 def supervisor_timesheets_modify(request, placement_id):
     placement = get_object_or_404(

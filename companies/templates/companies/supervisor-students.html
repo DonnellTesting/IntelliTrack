@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>My Assigned Students</h1>
-<p>These are the students currently assigned under your supervision.</p>
+<p style="margin-top: 1em;">These are the students currently assigned under your supervision.</p>
 
 <div class="students-wrapper">
     {% if placements %}
@@ -14,7 +14,7 @@
                     <th>Batch</th>
                     <th>Start Date</th>
                     <th>Target Hours</th>
-                    <th> </th>
+                    <th>Sign / View</th>
                     <th> </th>
                 </tr>
             </thead>
@@ -27,7 +27,7 @@
                     <td>{{ p.start_date|date:"M d, Y" }}</td>
                     <td>{{ p.target_hours }} hrs</td>
                     <td>
-                        <a href="{% url 'supervisor_timesheets_modify' p.id %}" class="btn btn-modify">Modify</a>
+                        <a href="{% url 'supervisor_timesheets_modify' p.id %}" class="btn btn-modify">Sign</a>
                         <a href="{% url 'supervisor_timesheets_view' p.id %}" class="btn btn-view">View</a>
                     </td>
                 </tr>
