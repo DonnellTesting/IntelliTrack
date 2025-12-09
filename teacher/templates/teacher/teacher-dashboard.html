@@ -1,9 +1,298 @@
 {% extends "teacher/base.html" %}
-
+{% load static %}
 {% block content %}
-<div class="page-header">
-    <h1>{{ class_obj.name }}</h1>
-    <p>Welcome, Instructor {{ request.user.first_name }} {{ request.user.last_name }}! </p>
+
+<h1 style="text-align: center; margin-bottom: 10px;">Advisor Dashboard</h1>
+<p style="text-align: center; margin-bottom: 30px;">Quick overview of your students' timesheet progress and performance ratings.</p>
+
+<!-- MAIN DASHBOARD CARDS -->
+<div class="dashboard-main horizontal-dashboard">
+    <!-- Total Students -->
+    <div class="dashboard-card main-card horizontal-content-card">
+        <div class="card-title">Total Students</div>
+        <div class="card-content">{{ total_students }}</div>
+    </div>
+
+    <!-- Class Hours Completion -->
+    <div class="dashboard-card main-card horizontal-content-card">
+        <div class="dashboard-card main-card horizontal-content-card">
+            <div class="left-side">
+                <div class="card-title">Class Hours Completion</div>
+                <div class="card-text-small">{{ class_completion_pct }}% of total hours completed</div>
+            </div>
+            <div class="right-side">
+                <canvas id="classCompletionChart" width="140" height="140"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Average Rating -->
+    <div class="dashboard-card main-card horizontal-content-card">
+        <div class="card-title">Average <br>Rating</div>
+        <div class="card-content">
+        <span id="classStars" data-stars="{{ avg_rating_stars }}"></span><br>
+        ({{ avg_rating }}/5)
+    </div>
+
+    </div>
 </div>
+
+<hr style="margin: 30px 0; border-color: rgba(255,255,255,0.2);">
+
+<!-- STUDENT SPECIFIC BLOCKS -->
+<div class="students-container">
+    {% for student in student_data %}
+    <div class="student-card horizontal-card">
+
+        <!-- Avatar + Name -->
+        <div class="student-name">
+            <div class="student-avatar">
+                {{ student.initials }}
+            </div>
+            <div class="student-name-text">
+                <h4>{{ student.name }}</h4>
+                <span class="student-role">Last Log-In: Castillejos, Zambales 📍</span>
+            </div>
+        </div>
+
+        <!-- Ratings + Progress -->
+        <div class="student-details-horizontal">
+            <div class="rating-block">
+                <span>Rating:</span><br>
+                <span class="studentStars" data-stars="{{ student.avg_rating_stars }}"></span><br>
+                ({{ student.avg_rating }}/5)
+                </span>
+            </div>
+
+            <div class="progress-block">
+                <span>Completion: {{ student.completion_pct }}%</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ student.completion_pct }}%;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+<!-- STYLES -->
+<style>
+/* MAIN DASHBOARD */
+.dashboard-main.horizontal-dashboard {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.main-card.horizontal-content-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 200px;
+    max-width: 600px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background: #273849;
+    text-align: left;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 24px;
+    margin-right: 20px;
+    flex: 1;
+}
+
+.card-text-small {
+    font-weight: normal;
+    font-size: 12px;
+    padding-top: 15px;
+    opacity: 80%;
+    flex: 1;
+}
+
+.card-content {
+    text-align: right;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.card-content canvas {
+    display: block;
+    margin: 0 auto 5px auto;
+}
+
+/* STUDENT CARDS */
+.students-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.student-card.horizontal-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #273849;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.student-name {
+    flex: 1;
+    font-weight: bold;
+}
+
+.student-details-horizontal {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.progress-block {
+    width: 120px;
+}
+
+.progress-bar {
+    background: #555;
+    border-radius: 6px;
+    height: 15px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4caf50;
+    border-radius: 6px 0 0 6px;
+}
+
+.rating-block {
+    width: 100px;
+    text-align: center;
+}
+    /* Avatar Circle */
+    .student-avatar {
+        width: 45px;
+        height: 45px;
+        background: #40619eff;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 18px;
+        margin-right: 12px;
+    }
+
+    /* Avatar + Name Alignment */
+    .student-name {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+    }
+
+    .student-name-text h4 {
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .student-role {
+        font-size: 12px;
+        opacity: 0.7;
+    }
+
+
+/* RESPONSIVE: Stack horizontal cards on small screens */
+@media (max-width: 768px) {
+    .dashboard-main.horizontal-dashboard,
+    .main-card.horizontal-content-card,
+    .student-card.horizontal-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-content {
+        text-align: left;
+        margin-top: 5px;
+    }
+
+    .student-details-horizontal {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .progress-block, .rating-block {
+        width: 100%;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById('classCompletionChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Remaining'],
+            datasets: [{
+                data: [{{ class_completion_pct }}, {{ class_completion_remaining }}],
+                backgroundColor: ['#4caf50', '#555'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            cutout: '70%'
+        }
+    });
+
+    const bars = document.querySelectorAll(".progress-fill");
+
+    bars.forEach(bar => {
+        const finalWidth = bar.style.width; // "45%"
+        bar.style.width = "0%";             // start at 0
+
+        setTimeout(() => {
+            bar.style.transition = "width 1.2s ease";
+            bar.style.width = finalWidth;
+        }, 200);
+    });
+
+    const classStarsElem = document.getElementById("classStars");
+
+    if (classStarsElem) {
+        const classStarString = classStarsElem.dataset.stars;
+        classStarsElem.innerHTML = "";
+        let index = 0;
+
+        const interval = setInterval(() => {
+            classStarsElem.innerHTML += classStarString[index];
+            index++;
+            if (index >= classStarString.length) clearInterval(interval);
+        }, 180);
+    }
+
+    const studentStarElems = document.querySelectorAll(".studentStars");
+
+    studentStarElems.forEach(elem => {
+        const starString = elem.dataset.stars;
+        elem.innerHTML = "";
+        let idx = 0;
+
+        const interval = setInterval(() => {
+            elem.innerHTML += starString[idx];
+            idx++;
+            if (idx >= starString.length) clearInterval(interval);
+        }, 140);
+});
+</script>
 
 {% endblock %}

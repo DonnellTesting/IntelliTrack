@@ -1,9 +1,117 @@
 {% extends "teacher/base.html" %}
 
 {% block content %}
-<div class="page-header">
-    <h1>{{ class_obj.name }}</h1>
-    <p>Timesheet Page</p>
+<h1>View Attendance and Performance</h1>
+
+<p style="margin-top: 1em;">These are the students currently assigned under your supervision.</p>
+
+<div class="students-wrapper">
+    {% if placements %}
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Company</th>
+                    <th>Batch</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Target Hours</th>
+                    <th>View Timesheets</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in placements %}
+                <tr>
+                    <td>{{ p.student.get_full_name }}</td>
+                    <td>{{ p.company_name|default:"N/A" }}</td>
+                    <td>{{ p.batch_year|default:"-" }}</td>
+                    <td>{{ p.start_date|date:"M d, Y" }}</td>
+                    <td>{{ p.end_date|date:"M d, Y" }}</td>
+                    <td>{{ p.target_hours }} hrs</td>
+                    <td>
+                        <a href="{% url 'instructor_timesheets_view' p.id %}" class="btn btn-view">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students assigned to you yet.</p>
+    {% endif %}
 </div>
+
+<style>
+    h1 {
+        margin-bottom: 5px;
+    }
+    p {
+        opacity: 0.8;
+        margin-top: 0;
+    }
+    .students-wrapper {
+        margin-top: 20px;
+    }
+    .students-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: #273849;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .students-table th, .students-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center
+    }
+    .students-table th {
+        background: #32495d;
+        font-weight: bold;
+        color: #fff;
+    }
+    .students-table td {
+        color: #eaeff5;
+    }
+    .students-table tr:last-child td {
+        border-bottom: none;
+    }
+    .btn {
+        padding: 6px 12px;
+        margin-right: 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        color: #fff;
+        transition: background 0.2s;
+    }
+
+    .btn-modify {
+        background: #4caf50;
+    }
+
+    .btn-modify:hover {
+        background: #45a049;
+    }
+
+    .btn-view {
+        background: #2196f3;
+    }
+
+    .btn-view:hover {
+        background: #0b7dda;
+    }
+
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".clickable-row").forEach(row => {
+        row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+        });
+    });
+});
+</script>
 
 {% endblock %}

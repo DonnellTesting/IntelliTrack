@@ -180,14 +180,16 @@
 
         <div class="nav-item" onclick="location.href='/instructor'">Dashboard</div>
 
-        <div class="nav-item" onclick="location.href='/instructor/class'">My Class</div>
+        <div class="nav-item" onclick="location.href='/instructor/placements'">My Class</div>
 
-        <div class="nav-item" onclick="toggleDropdown('ojtMenu')">OJT Management ▾</div>
+        <div class="nav-item" onclick="location.href='/instructor/timesheets'">Timesheets & Performances</div>
+
+        {% comment %} <div class="nav-item" onclick="toggleDropdown('ojtMenu')">OJT Management ▾</div>
         <div id="ojtMenu" class="dropdown">
             <a href="/instructor/timesheets">Student Timesheets</a>
             <a href="/instructor/performance">Student Performances</a>
             <a href="/instructor/placements">Student OJT Placements</a>
-        </div>
+        </div> {% endcomment %}
 
         <div class="nav-item" onclick="toggleDropdown('annMenu')">Announcements ▾</div>
         <div id="annMenu" class="dropdown">

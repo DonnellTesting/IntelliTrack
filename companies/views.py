@@ -1,16 +1,12 @@
-# student/views.py
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from ojt_tracker.decorators import role_required
-from student.models import OJTPlacement
-from student.models import OJTProgress
+from student.models import OJTPlacement, OJTProgress
 from accounts.models import Announcement
 from accounts.forms import AnnouncementForm
 from django.utils import timezone
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.http import HttpResponseNotAllowed
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseNotAllowed, HttpResponseForbidden
 from datetime import date
 import calendar
 from django.db.models import Sum, Avg

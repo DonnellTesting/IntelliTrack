@@ -1,82 +1,111 @@
 {% extends "teacher/base.html" %}
 
 {% block content %}
+<h1>My Assigned Students</h1>
+<p style="margin-top: 1em;">These are the students currently assigned under your supervision.</p>
 
-<h1>Your Class</h1>
+<div class="students-wrapper">
+    {% if placements %}
+        <table class="students-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Company</th>
+                    <th>Batch</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Target Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in placements %}
+                <tr>
+                    <td>{{ p.student.get_full_name }}</td>
+                    <td>{{ p.company_name|default:"N/A" }}</td>
+                    <td>{{ p.batch_year|default:"-" }}</td>
+                    <td>{{ p.start_date|date:"M d, Y" }}</td>
+                    <td>{{ p.end_date|date:"M d, Y" }}</td>
+                    <td>{{ p.target_hours }} hrs</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No students assigned to you yet.</p>
+    {% endif %}
+</div>
 
 <style>
-    table { width:100%; border-collapse: collapse; margin-top:20px; cursor:pointer; }
-    th, td { padding:10px; border-bottom:1px solid #374151; text-align:left; }
-    th { background:#111827; }
-    th:hover { background:#0F172A; }
+    h1 {
+        margin-bottom: 5px;
+    }
+    p {
+        opacity: 0.8;
+        margin-top: 0;
+    }
+    .students-wrapper {
+        margin-top: 20px;
+    }
+    .students-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: #273849;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .students-table th, .students-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center; /* Center headers and rows */
+    }
+    .students-table th {
+        background: #32495d;
+        font-weight: bold;
+        color: #fff;
+    }
+    .students-table td {
+        color: #eaeff5;
+    }
+    .students-table tr:last-child td {
+        border-bottom: none;
+    }
+    .btn {
+        padding: 6px 12px;
+        margin-right: 5px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        color: #fff;
+        transition: background 0.2s;
+    }
+
+    .btn-modify {
+        background: #4caf50;
+    }
+
+    .btn-modify:hover {
+        background: #45a049;
+    }
+
+    .btn-view {
+        background: #2196f3;
+    }
+
+    .btn-view:hover {
+        background: #0b7dda;
+    }
+
 </style>
 
 <script>
-    // Simple table sorter
-    function sortTable(n) {
-        let table = document.getElementById("placementTable");
-        let switching = true, dir = "asc", switchcount = 0;
-
-        while (switching) {
-            switching = false;
-            let rows = table.rows;
-
-            for (let i = 1; i < rows.length - 1; i++) {
-                let shouldSwitch = false;
-                let x = rows[i].getElementsByTagName("TD")[n];
-                let y = rows[i + 1].getElementsByTagName("TD")[n];
-
-                let cmpX = x.innerText.toLowerCase();
-                let cmpY = y.innerText.toLowerCase();
-
-                if (dir === "asc" && cmpX > cmpY) shouldSwitch = true;
-                else if (dir === "desc" && cmpX < cmpY) shouldSwitch = true;
-
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                    switchcount++;
-                    break;
-                }
-            }
-
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".clickable-row").forEach(row => {
+        row.addEventListener("click", () => {
+            window.location.href = row.dataset.href;
+        });
+    });
+});
 </script>
-
-{% if placements %}
-    <table id="placementTable">
-        <thead>
-            <tr>
-                <th onclick="sortTable(0)">Student</th>
-                <th onclick="sortTable(1)">Batch Year</th>
-                <th onclick="sortTable(2)">Company</th>
-                <th onclick="sortTable(3)">Supervisor</th>
-                <th onclick="sortTable(4)">Start</th>
-                <th onclick="sortTable(5)">End</th>
-                <th onclick="sortTable(6)">Target Hours</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in placements %}
-            <tr>
-                <td>{{ p.student.get_full_name }}</td>
-                <td>{{ p.batch_year|default:"-" }}</td>
-                <td>{{ p.company_name|default:"No company" }}</td>
-                <td>{{ p.supervisor.get_full_name|default:"None" }}</td>
-                <td>{{ p.start_date|default:"-" }}</td>
-                <td>{{ p.end_date|default:"-" }}</td>
-                <td>{{ p.target_hours }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    <p>No placements found.</p>
-{% endif %}
 
 {% endblock %}

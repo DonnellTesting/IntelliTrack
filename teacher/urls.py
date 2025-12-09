@@ -6,12 +6,12 @@ urlpatterns = [
     path('', views.dashboard, name='instructor_dashboard'),
 
     #Class List
-    path('class/', views.instructor_class_list, name='instructor_class'),
+    path('placements/', views.instructor_placements, name='instructor_placements'),
 
     # OJT Management
     path('timesheets/', views.instructor_timesheets, name='instructor_timesheets'),
-    path('performance/', views.instructor_performance, name='instructor_performance'),
-    path('placements/', views.instructor_placements, name='instructor_placements'),
+    path('timesheets/view/<placement_id>', views.instructor_timesheets_view, name='instructor_timesheets_view'),
+    path('timesheets/calendar/<int:placement_id>', views.instructor_timesheets_calendar, name='instructor_timesheets_calendar'),
 
     # Announcements
     path('announcements/create/', views.instructor_announcement_create, name='instructor_announcement_create'),
