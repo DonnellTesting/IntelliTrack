@@ -1,8 +1,8 @@
 {% extends "companies/base.html" %}
 {% block content %}
 
-<h1>{{ placement.student.get_full_name }} – Calendar View</h1>
-<p>Company: {{ placement.company_name }}</p>
+<h1>Student Timesheet Calendar View</h1>
+<p>Name: {{ placement.student.get_full_name }}</p>
 <p>Batch: {{ placement.batch_year }}</p>
 
 <button class="primary-btn" onclick="location.href='{% url 'supervisor_timesheets_view' placement.id %}'">

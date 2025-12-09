@@ -1,8 +1,8 @@
 {% extends "companies/base.html" %}
 {% block content %}
 
-<h1>{{ placement.student.get_full_name }} – Timesheet Overview</h1>
-<p>Company: {{ placement.company_name }}</p>
+<h1>Student Timesheet Overview</h1>
+<p>Name: {{ placement.student.get_full_name }}</p>
 <p>Batch: {{ placement.batch_year }}</p>
 
 <!-- CALENDAR WRAPPER -->
@@ -12,8 +12,6 @@
 </button>
 
 <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
-
-<br><br>
 
 <!-- TABLE VIEW -->
 <h2>Table View</h2>
@@ -110,11 +108,12 @@
     .timesheet-table th, .timesheet-table td {
         padding: 12px;
         border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center;
     }
 
     .timesheet-table th {
         background: #1F2A37;
-        text-align: left;
+        text-align: center;
     }
 
     .primary-btn {
@@ -132,7 +131,7 @@
         background: #0097a7;
     }
 
-        .delete-btn {
+    .delete-btn {
         background: #e74c3c; /* red */
         padding: 6px 12px;
         color: white;
