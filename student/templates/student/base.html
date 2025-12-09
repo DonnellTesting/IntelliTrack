@@ -182,13 +182,17 @@
 
         <div class="nav-item" onclick="location.href='/student/class'">My Class</div>
 
-        <div class="nav-item" onclick="toggleDropdown('ojtMenu')">
+        {% comment %} <div class="nav-item" onclick="toggleDropdown('ojtMenu')">
             OJT Management ▾
         </div>
         <div id="ojtMenu" class="dropdown">
             <a href="/student/timesheet">My Timesheet</a>
             <a href="/student/performance">My Performance</a>
             <a href="/student/placement">My OJT Placement</a>
+        </div> {% endcomment %}
+
+        <div class="nav-item" onclick="location.href='/student/timesheets/{{ student_placement_id }}'">
+            My Timesheet & Performance
         </div>
 
         <div class="nav-item" onclick="location.href='/student/announcements'">

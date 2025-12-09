@@ -1,0 +1,229 @@
+{% extends "student/base.html" %}
+{% block content %}
+
+<h1>Student Timesheet Calendar View</h1>
+<p>Name: {{ placement.student.get_full_name }}</p>
+<p>Batch: {{ placement.batch_year }}</p>
+
+<!-- STUDENT STATS -->
+<div class="student-stats">
+    <div class="stat-card">
+        <h3>Average Rating</h3>
+        <div class="stars" id="animatedStars" data-stars="{{ avg_rating_stars }}"></div>
+        <small>{{ avg_rating }}/5</small>
+    </div>
+
+    <div class="stat-card">
+        <h3>Total Hours</h3>
+        <div class="hours-counter" id="hoursCounter" data-value="{{ total_hours }}"></div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: {{ completion_pct }}%;"></div>
+        </div>
+
+        <small>{{ completion_pct }}% complete</small>
+    </div>
+</div>
+
+<button class="primary-btn" onclick="location.href='{% url 'student_timesheets' placement.id %}'">
+    Switch to Table View
+</button>
+
+<hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
+
+<div class="calendar-container">
+    {% load custom_tags %}
+
+{% for month in months %}
+    <h2>{{ month.name }} 2026</h2>
+    <!-- Weekday headers -->
+    <div class="calendar-grid weekdays">
+        <div class="calendar-day weekday">Sun</div>
+        <div class="calendar-day weekday">Mon</div>
+        <div class="calendar-day weekday">Tue</div>
+        <div class="calendar-day weekday">Wed</div>
+        <div class="calendar-day weekday">Thu</div>
+        <div class="calendar-day weekday">Fri</div>
+        <div class="calendar-day weekday">Sat</div>
+    </div>
+
+    <!-- Days -->
+    <div class="calendar-grid">
+        {% for day in month.days %}
+            {% with day_log=logs_dict|get_item:day %}
+                <div class="calendar-day
+                    {% if day.month != month.number %}other-month{% endif %}
+
+                    {% if day_log %}
+                        {% if day_log.performance_rating <= 2 %}
+                            rating-red
+                        {% elif day_log.performance_rating == 3 %}
+                            rating-yellow
+                        {% elif day_log.performance_rating >= 4 %}
+                            rating-green
+                        {% endif %}
+                    {% endif %}
+                ">
+                <strong>{{ day.day }}</strong>
+
+                {% if day_log %}
+                    <div class="hours">Hours: {{ day_log.hours_worked }} 🕐</div>
+                    <div class="rating">Rating: {{ day_log.performance_rating }} ⭐️</div>
+                {% endif %}
+            </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+    <br>
+{% endfor %}
+</div>
+
+<style>
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-day {
+    background: #273849;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    text-align: center;
+    min-height: 75px;
+}
+
+.primary-btn {
+    background: #00bcd4;
+    padding: 12px 20px;
+    color: #1F2A37;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.primary-btn:hover {
+    background: #0097a7;
+}
+
+.calendar-day.other-month {
+    background: #1F2A37;
+    opacity: 0;
+}
+
+.calendar-day.weekday {
+    background: #1F2A37;
+    font-weight: bold;
+    box-shadow: none;
+    padding: 5px 2px; /* smaller horizontal padding */
+}
+
+.hours, .rating {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.student-stats {
+    display: flex;
+    gap: 25px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: #273849;
+    padding: 15px 20px;
+    border-radius: 10px;
+    width: 250px;
+}
+
+.stars {
+    font-size: 26px;
+    color: gold;
+    letter-spacing: 3px;
+    min-height: 34px;
+}
+
+.hours-counter {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.progress-bar {
+    margin-top: 10px;
+    background: #555;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4caf50;
+    width: 0%;
+}
+
+/* 🟥 1–2 Rating — Neutral Red */
+.rating-red {
+    background: #8b4040;     /* muted red tone */
+    border: 1px solid #b85c5c;
+}
+
+/* 🟨 3 Rating — Neutral Yellow */
+.rating-yellow {
+    background: #9c8f4a;     /* muted yellow tone */
+    border: 1px solid #c7b76b;
+}
+
+/* 🟩 4–5 Rating — Neutral Green */
+.rating-green {
+    background: #72b372ff;     /* muted green tone */
+    border: 1px solid #6ca96c;
+}
+
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+    // ⭐ STAR ANIMATION
+    const starContainer = document.getElementById("animatedStars");
+    const starString = starContainer.dataset.stars;
+
+    starContainer.innerHTML = "";
+    let index = 0;
+
+    const starInterval = setInterval(() => {
+        starContainer.innerHTML += starString[index];
+        index++;
+        if (index >= starString.length) clearInterval(starInterval);
+    }, 200);
+
+    // ⏳ HOURS COUNTER ANIMATION
+    const hoursElem = document.getElementById("hoursCounter");
+    const finalHours = parseInt(hoursElem.dataset.value);
+    let current = 0;
+
+    const counter = setInterval(() => {
+        current++;
+        hoursElem.innerText = current;
+        if (current >= finalHours) clearInterval(counter);
+    }, 10);
+
+    // 📊 PROGRESS BAR ANIMATION
+    const fill = document.getElementById("progressFill");
+    const finalWidth = fill.style.width;
+
+    fill.style.width = "0%";
+
+    setTimeout(() => {
+        fill.style.transition = "width 1.2s ease";
+        fill.style.width = finalWidth;
+    }, 300);
+
+});
+</script>
+
+{% endblock %}
