@@ -212,11 +212,31 @@ def supervisor_timesheets_calendar(request, placement_id):
     placement = get_object_or_404(OJTPlacement, id=placement_id)
     logs = OJTProgress.objects.filter(placement=placement)
     log_dates = {log.date for log in logs}
-    logs_dict = {log.date: log for log in logs}  # <-- mapping date -> log
+    logs_dict = {log.date: log for log in logs}
+
+    MAX_HOURS = 600
+
+    total_hours = logs.aggregate(total=Sum('hours_worked'))['total'] or 0
+    completion_pct = round(total_hours / MAX_HOURS * 100, 1)
+
+    avg_rating = logs.aggregate(avg=Avg('performance_rating'))['avg'] or 0
+    avg_rating = round(avg_rating, 2)
+
+    # Generate stars
+    def generate_stars(rating):
+        stars = ""
+        for i in range(1, 6):
+            if rating >= i:
+                stars += "★"
+            else:
+                stars += "☆"
+        return stars
+
+    avg_rating_stars = generate_stars(avg_rating)
 
     months = []
     for month_num in range(1, 7):
-        cal = calendar.Calendar(firstweekday=6)  # Sunday start
+        cal = calendar.Calendar(firstweekday=6)
         month_days = list(cal.itermonthdates(2026, month_num))
         months.append({
             'name': calendar.month_name[month_num],
@@ -228,7 +248,11 @@ def supervisor_timesheets_calendar(request, placement_id):
         'placement': placement,
         'months': months,
         'log_dates': log_dates,
-        'logs_dict': logs_dict,  # pass it to template
+        'logs_dict': logs_dict,
+        'total_hours': total_hours,
+        'completion_pct': completion_pct,
+        'avg_rating': avg_rating,
+        'avg_rating_stars': avg_rating_stars,
     })
 
 @role_required(['company'])

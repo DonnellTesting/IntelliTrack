@@ -28,8 +28,12 @@
 
     <!-- Average Rating -->
     <div class="dashboard-card main-card horizontal-content-card">
-        <div class="card-title">Average Rating</div>
-        <div class="card-content">{{ avg_rating_stars }} ({{ avg_rating }}/5)</div>
+        <div class="card-title">Average <br>Rating</div>
+        <div class="card-content">
+        <span id="classStars" data-stars="{{ avg_rating_stars }}"></span><br>
+        ({{ avg_rating }}/5)
+    </div>
+
     </div>
 </div>
 
@@ -54,8 +58,10 @@
         <!-- Ratings + Progress -->
         <div class="student-details-horizontal">
             <div class="rating-block">
-                <span>Rating:</span>
-                <span class="star-rating">{{ student.avg_rating_stars }} ({{ student.avg_rating }}/5)</span>
+                <span>Rating:</span><br>
+                <span class="studentStars" data-stars="{{ student.avg_rating_stars }}"></span><br>
+                ({{ student.avg_rating }}/5)
+                </span>
             </div>
 
             <div class="progress-block">
@@ -230,7 +236,6 @@
 }
 </style>
 
-<!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     new Chart(document.getElementById('classCompletionChart'), {
@@ -260,6 +265,34 @@
             bar.style.width = finalWidth;
         }, 200);
     });
+
+    const classStarsElem = document.getElementById("classStars");
+
+    if (classStarsElem) {
+        const classStarString = classStarsElem.dataset.stars;
+        classStarsElem.innerHTML = "";
+        let index = 0;
+
+        const interval = setInterval(() => {
+            classStarsElem.innerHTML += classStarString[index];
+            index++;
+            if (index >= classStarString.length) clearInterval(interval);
+        }, 180);
+    }
+
+    const studentStarElems = document.querySelectorAll(".studentStars");
+
+    studentStarElems.forEach(elem => {
+        const starString = elem.dataset.stars;
+        elem.innerHTML = "";
+        let idx = 0;
+
+        const interval = setInterval(() => {
+            elem.innerHTML += starString[idx];
+            idx++;
+            if (idx >= starString.length) clearInterval(interval);
+        }, 140);
+});
 </script>
 
 {% endblock %}
