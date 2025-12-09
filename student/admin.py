@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import OJTPlacement, OJTProgress
 
 class OJTProgressInline(admin.TabularInline):
@@ -8,13 +9,23 @@ class OJTProgressInline(admin.TabularInline):
     ordering = ("-date",)  # newest entries first
 
 
+class OJTPlacementForm(forms.ModelForm):
+    schedule_time = forms.TimeField(
+        required=False,
+        widget=forms.TimeInput(format='%H:%M', attrs={'type': 'time'})
+    )
+
+    class Meta:
+        model = OJTPlacement
+        fields = '__all__'
+
 @admin.register(OJTPlacement)
 class OJTPlacementAdmin(admin.ModelAdmin):
-    list_display = ("student", "supervisor", "company_name", "start_date", "end_date")
-    list_filter = ("company_name", "supervisor")
-    search_fields = ("student__first_name", "student__last_name", "company_name")
-
-    inlines = [OJTProgressInline]
+    form = OJTPlacementForm
+    list_display = (
+        "student", "supervisor", "company_name",
+        "start_date", "end_date", "schedule_days", "schedule_time"
+    )
 
 
 @admin.register(OJTProgress)
