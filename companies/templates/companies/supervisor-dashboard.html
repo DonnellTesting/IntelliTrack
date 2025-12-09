@@ -248,6 +248,18 @@
             cutout: '70%'
         }
     });
+
+    const bars = document.querySelectorAll(".progress-fill");
+
+    bars.forEach(bar => {
+        const finalWidth = bar.style.width; // "45%"
+        bar.style.width = "0%";             // start at 0
+
+        setTimeout(() => {
+            bar.style.transition = "width 1.2s ease";
+            bar.style.width = finalWidth;
+        }, 200);
+    });
 </script>
 
 {% endblock %}
