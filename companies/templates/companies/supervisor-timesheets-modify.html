@@ -1,190 +1,189 @@
 {% extends "companies/base.html" %}
 {% block content %}
 
-<h1>Sign Student Timesheet and Performance</h1>
+<h1 style="text-align: center;">Sign Student Timesheet and Performance</h1>
 
-<div class="profile-card">
-    <div class="profile-row">
-        <span class="label">Student:</span>
-        <span class="value">{{ placement.student.get_full_name }}</span>
+<div class="center-container">
+    <div class="profile-card">
+        <div class="profile-row">
+            <span class="label">Student:</span>
+            <span class="value">{{ placement.student.get_full_name }}</span>
+        </div>
+
+        <div class="profile-row">
+            <span class="label">Batch:</span>
+            <span class="value">{{ placement.batch_year|default:"-" }}</span>
+        </div>
+
+        <div class="profile-row">
+            <span class="label">OJT Period:</span>
+            <span class="value">
+                {% if placement.start_date and placement.end_date %}
+                    {{ placement.start_date|date:"M d, Y" }} – {{ placement.end_date|date:"M d, Y" }}
+                {% else %}
+                    Not set
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="profile-row">
+            <span class="label">Scheduled Days:</span>
+            <span class="value">
+                {% if placement.schedule_days %}
+                    {{ placement.get_schedule_days_display }}
+                {% else %}
+                    Not set
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="profile-row">
+            <span class="label">Scheduled Time:</span>
+            <span class="value">
+                {% if placement.schedule_time %}
+                    {{ placement.schedule_time|time:"h:i A" }}
+                {% else %}
+                    Not set
+                {% endif %}
+            </span>
+        </div>
     </div>
 
-    <div class="profile-row">
-        <span class="label">Batch:</span>
-        <span class="value">{{ placement.batch_year|default:"-" }}</span>
-    </div>
+    <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0; width: 100%;">
 
-    <div class="profile-row">
-        <span class="label">OJT Period:</span>
-        <span class="value">
-            {% if placement.start_date and placement.end_date %}
-                {{ placement.start_date|date:"M d, Y" }} – {{ placement.end_date|date:"M d, Y" }}
-            {% else %}
-                Not set
-            {% endif %}
-        </span>
-    </div>
+    <form method="POST" class="timesheet-form">
+        {% csrf_token %}
 
-    <div class="profile-row">
-        <span class="label">Scheduled Days:</span>
-        <span class="value">
-            {% if placement.schedule_days %}
-                {{ placement.get_schedule_days_display }}
-            {% else %}
-                Not set
-            {% endif %}
-        </span>
-    </div>
+        <label>Date 📅</label>
+        <input 
+            type="date" 
+            name="date" 
+            id="date-field" 
+            required
+            min="2026-01-01"
+            max="2026-06-30"
+        >
 
-    <div class="profile-row">
-        <span class="label">Scheduled Time:</span>
-        <span class="value">
-            {% if placement.schedule_time %}
-                {{ placement.schedule_time|time:"h:i A" }}
-            {% else %}
-                Not set
-            {% endif %}
-        </span>
-    </div>
+        <button type="button" class="secondary-btn" 
+                style="margin-top: 5px; width: fit-content;"
+                onclick="document.getElementById('date-field').value = new Date().toISOString().split('T')[0];">
+            Select the Date Today 
+        </button>
+
+        <label>Hours Worked 🕐</label>
+        <input type="number" step="0.25" name="hours_worked" placeholder="e.g. 8.0" min="0" max="12" required>
+
+        <label>Performance Rating (1–5)</label>
+        <select name="performance_rating" required>
+            <option value="">Select rating ⭐️</option>
+            {% for i in "12345" %}
+                <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Remarks 💭</label>
+        <textarea name="remarks" rows="4" placeholder="Please let us know more about your rating."></textarea>
+
+        <button class="primary-btn" type="submit">Save Entry</button>
+    </form>
+
+    <br>
+
+    <button class="secondary-btn" onclick="location.href='{% url 'supervisor_timesheets_view' placement.id %}'">
+        View Student Timesheet
+    </button>
 </div>
 
-<hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
-
-<form method="POST" class="timesheet-form">
-    {% csrf_token %}
-
-    <label>Date 📅</label>
-    <input 
-        type="date" 
-        name="date" 
-        id="date-field" 
-        required
-        min="2026-01-01"
-        max="2026-06-30"
-    >
-
-    <button type="button" class="secondary-btn" 
-            style="margin-top: 5px; width: fit-content;"
-            onclick="document.getElementById('date-field').value = new Date().toISOString().split('T')[0];">
-        Select the Date Today 
-    </button>
-
-
-    <label>Hours Worked 🕐</label>
-    <input type="number" step="0.25" name="hours_worked" placeholder="e.g. 8.0" min="0" max="12" required>
-
-    <label>Performance Rating (1–5)</label>
-    <select name="performance_rating" required>
-        <option value="">Select rating ⭐️</option>
-        {% for i in "12345" %}
-            <option value="{{ i }}">{{ i }}</option>
-        {% endfor %}
-    </select>
-
-    <label>Remarks 💭</label>
-    <textarea name="remarks" rows="4" placeholder="Please let us know more about your rating."></textarea>
-
-    <button class="primary-btn" type="submit">Save Entry</button>
-</form>
-
-<br>
-
-<button class="secondary-btn" onclick="location.href='{% url 'supervisor_timesheets_view' placement.id %}'">
-    View Student Timesheet
-</button>
-
 <style>
-    .timesheet-form {
-        width: 100%;
-        max-width: 500px;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
+.center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* centers horizontally */
+    margin: 0 auto;
+}
 
-    label {
-        opacity: 0.9;
-        font-weight: 600;
-    }
+.timesheet-form {
+    width: 75%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-    input, select, textarea {
-        padding: 10px;
-        background: #273849;
-        border: 1px solid rgba(255,255,255,0.2);
-        color: white;
-        border-radius: 6px;
-    }
+label {
+    opacity: 0.9;
+    font-weight: 600;
+}
 
-    input:focus, select:focus, textarea:focus {
-        outline: none;
-        border-color: #00bcd4;
-    }
+input, select, textarea {
+    padding: 10px;
+    background: #273849;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    border-radius: 6px;
+}
 
-    .primary-btn {
-        background: #4caf50;
-        padding: 12px 20px;
-        color: #ffffffff;
-        font-weight: bold;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.2s;
-    }
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #00bcd4;
+}
 
-    .primary-btn:hover {
-        background: #45a049;
-    }
+.primary-btn {
+    background: #4caf50;
+    padding: 12px 20px;
+    color: #ffffffff;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-    .secondary-btn {
-        background: #1F2A37;
-        padding: 10px 18px;
-        border: 1px solid rgba(255,255,255,0.2);
-        color: white;
-        border-radius: 6px;
-        cursor: pointer;
-    }
+.primary-btn:hover {
+    background: #45a049;
+}
 
-    .secondary-btn:hover {
-        background: #273849;
-    }
+.secondary-btn {
+    background: #1F2A37;
+    padding: 10px 18px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-    .profile-card {
-        border-radius: 10px;
-        margin: 0 0 0 0;  /* top, right, bottom, left */
-        color: #eaeff5;
-        width: 60%;             /* reduced from 100% */
-        {% comment %} max-width: 600px;       /* optional, prevents it from getting too wide */ {% endcomment %}
-    }
+.secondary-btn:hover {
+    background: #273849;
+}
 
-    .profile-card h2 {
-        margin: 0 0 10px 0; /* reduced bottom margin */
-        color: #fff;
-        font-size: 1.3rem;  /* slightly smaller font */
-        border-bottom: 1px solid rgba(255,255,255,0.15);
-        padding-bottom: 6px; /* reduced padding */
-    }
+.profile-card {
+    border-radius: 10px;
+    color: #eaeff5;
+    width: 75%;
+    min-width: 300px;
+}
 
-    .profile-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 6px 0; /* smaller vertical padding */
-        border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
 
-    .profile-row:last-child {
-        border-bottom: none;
-    }
+.profile-row:last-child {
+    border-bottom: none;
+}
 
-    .profile-row .label {
-        font-weight: bold;
-        font-size: 0.95rem; /* slightly smaller */
-        color: #cfd6de;
-    }
+.profile-row .label {
+    font-weight: bold;
+    font-size: 0.95rem;
+    color: #cfd6de;
+}
 
-    .profile-row .value {
-        font-size: 0.95rem; /* slightly smaller */
-        opacity: 0.9;
-    }
+.profile-row .value {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
 </style>
 
 {% if saved %}
