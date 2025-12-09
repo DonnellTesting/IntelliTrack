@@ -5,6 +5,31 @@
 <p>Name: {{ placement.student.get_full_name }}</p>
 <p>Batch: {{ placement.batch_year }}</p>
 
+<!-- OVERVIEW STATS -->
+<div class="student-stats">
+    <div class="stat-card">
+        <h3>Average Rating</h3>
+        <div class="stars" id="animatedStars"
+             data-stars="{{ avg_rating_stars }}">
+        </div>
+        <small>{{ avg_rating }}/5</small>
+    </div>
+
+    <div class="stat-card">
+        <h3>Total Hours</h3>
+        <div class="hours-counter" id="hoursCounter"
+             data-value="{{ total_hours }}">
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" 
+                 id="progressFill"
+                 style="width: {{ completion_pct }}%;">
+            </div>
+        </div>
+        <small>{{ completion_pct }}% complete</small>
+    </div>
+</div>
+
 <!-- CALENDAR WRAPPER -->
 <button class="primary-btn" style="margin-bottom: 20px;" 
         onclick="location.href='{% url 'supervisor_timesheets_calendar' placement.id %}'">
@@ -145,6 +170,88 @@
     .delete-btn:hover {
         background: #c0392b;
     }
+
+    .student-stats {
+    display: flex;
+    gap: 25px;
+    margin: 20px 0;
+}
+
+    .stat-card {
+        background: #273849;
+        padding: 15px 20px;
+        border-radius: 10px;
+        width: 250px;
+    }
+
+    .stars {
+        font-size: 26px;
+        letter-spacing: 3px;
+        color: gold;
+        min-height: 34px;
+    }
+
+    .hours-counter {
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .progress-bar {
+        margin-top: 10px;
+        background: #555;
+        height: 12px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #4caf50;
+        width: 0%;
+    }
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // ⭐ Animate Stars
+    const starContainer = document.getElementById("animatedStars");
+    const starString = starContainer.dataset.stars;
+    starContainer.innerHTML = "";
+
+    let i = 0;
+    const starInterval = setInterval(() => {
+        starContainer.innerHTML += starString[i];
+        i++;
+        if (i >= starString.length) clearInterval(starInterval);
+    }, 200); // star appears every 200ms
+
+
+
+    // 🔢 Animate Hours Counter
+    const hoursElem = document.getElementById("hoursCounter");
+    const finalValue = parseInt(hoursElem.dataset.value);
+    let current = 0;
+
+    const counterInterval = setInterval(() => {
+        current++;
+        hoursElem.innerText = current;
+        if (current >= finalValue) clearInterval(counterInterval);
+    }, 10);
+
+
+
+    // 📊 Animate Progress Bar
+    const fill = document.getElementById("progressFill");
+    const finalWidth = fill.style.width; // e.g. "45%"
+    fill.style.width = "0%";
+
+    setTimeout(() => {
+        fill.style.transition = "width 1.2s ease";
+        fill.style.width = finalWidth;
+    }, 300);
+
+});
+</script>
 
 {% endblock %}

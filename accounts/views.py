@@ -32,7 +32,7 @@ def profile_page(request):
     role_redirects = {
         "student": "/student/",
         "instructor": "/instructor/",
-        "company": "/company/",
+        "company": "/supervisor/",
         "admin": "/admin/",
     }
 

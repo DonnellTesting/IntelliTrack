@@ -174,14 +174,37 @@ def supervisor_timesheets_view(request, placement_id):
     placement = get_object_or_404(
         OJTPlacement,
         id=placement_id,
-        supervisor=request.user  # Extra safety
+        supervisor=request.user
     )
 
     logs = placement.progress_logs.all()
 
+    MAX_HOURS = 600
+
+    total_hours = logs.aggregate(total=Sum('hours_worked'))['total'] or 0
+    completion_pct = round(total_hours / MAX_HOURS * 100, 1)
+
+    avg_rating = logs.aggregate(avg=Avg('performance_rating'))['avg'] or 0
+    avg_rating = round(avg_rating, 2)
+
+    def generate_stars(rating):
+        stars = ""
+        for i in range(1, 5 + 1):
+            if rating >= i:
+                stars += "★"
+            else:
+                stars += "☆"
+        return stars
+
+    star_string = generate_stars(avg_rating)
+
     return render(request, "companies/supervisor-timesheets-view.html", {
         "placement": placement,
         "logs": logs,
+        "total_hours": total_hours,
+        "completion_pct": completion_pct,
+        "avg_rating": avg_rating,
+        "avg_rating_stars": star_string,
     })
 
 @role_required(['company'])
