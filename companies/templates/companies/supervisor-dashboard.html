@@ -1,6 +1,155 @@
 {% extends "companies/base.html" %}
-
+{% load static %}
 {% block content %}
-    <h1>Welcome, Supervisor!</h1>
+
+<h1 style="text-align: center;">Supervisor Dashboard</h1>
+<p style="text-align: center;">Quick overview of your students' timesheet progress and performance ratings.</p>
+
+<!-- MAIN BLOCKS -->
+<div class="dashboard-main">
+    <!-- Total Students -->
+    <div class="dashboard-card main-card">
+        <h3>Total Students</h3>
+        <p class="main-value">{{ total_students }}</p>
+    </div>
+
+    <!-- Class Hours Completion -->
+    <div class="dashboard-card main-card">
+        <h3>Class Hours Completion</h3>
+        <canvas id="classCompletionChart" width="120" height="120"></canvas>
+        <p>{{ class_completion_pct }}% of total hours completed</p>
+    </div>
+
+    <!-- Average Rating -->
+<!-- Average Rating -->
+    <div class="dashboard-card main-card">
+        <h3>Average Rating</h3>
+        <p class="star-rating">
+            {{ avg_rating_stars }} ({{ avg_rating }}/5)
+        </p>
+    </div>
+</div>
+
+<hr style="margin: 40px 0; border-color: rgba(255,255,255,0.2);">
+
+<!-- STUDENT SPECIFIC BLOCKS -->
+<div class="students-container">
+    {% for student in student_data %}
+    <div class="student-card">
+        <h4>{{ student.name }}</h4>
+
+        <div class="student-details">
+            <!-- Completion bar -->
+            <div class="progress-block">
+                <span>Completion: {{ student.completion_pct }}%</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ student.completion_pct }}%;"></div>
+                </div>
+            </div>
+
+            <!-- Rating stars -->
+<!-- Rating stars for each student -->
+            <div class="rating-block">
+                <span>Rating:</span>
+                <span class="star-rating">
+                    {{ student.avg_rating_stars }} ({{ student.avg_rating }}/5)
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- STYLES -->
+<style>
+.dashboard-main {
+    display: flex;
+    gap: 20px;
+    justify-content: space-around;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.main-card {
+    flex: 1;
+    min-width: 220px;
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #273849;
+    text-align: center;
+}
+
+.main-value {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.star-rating {
+    color: #fdd835;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.students-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.student-card {
+    background: #273849;
+    padding: 15px 20px;
+    border-radius: 10px;
+}
+
+.student-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.progress-block, .rating-block {
+    width: 48%;
+}
+
+.progress-bar {
+    background: #555;
+    border-radius: 8px;
+    height: 20px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4caf50;
+    border-radius: 8px 0 0 8px;
+}
+</style>
+
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Class completion doughnut
+    new Chart(document.getElementById('classCompletionChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Remaining'],
+            datasets: [{
+                data: [{{ class_completion_pct }}, {{ class_completion_remaining }}],
+                backgroundColor: ['#4caf50', '#555'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            cutout: '70%'
+        }
+    });
+</script>
 
 {% endblock %}
