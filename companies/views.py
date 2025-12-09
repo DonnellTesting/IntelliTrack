@@ -17,21 +17,31 @@ from django.db.models import Sum, Avg
 
 @role_required(['company'])
 def dashboard(request):
-    # Get all students under this supervisor's company
-    students = OJTPlacement.objects.all()  # Adjust if filtering by company
+    # Only fetch students supervised by this company user
+    students = OJTPlacement.objects.filter(supervisor=request.user)
 
     total_students = students.count()
 
-    # Class total hours / max hours per student
     MAX_HOURS = 600
-    total_hours = OJTProgress.objects.aggregate(total=Sum('hours_worked'))['total'] or 0
-    class_completion_pct = round(total_hours / (total_students * MAX_HOURS) * 100, 1) if total_students else 0
 
-    # Average rating for entire class
-    avg_rating = OJTProgress.objects.aggregate(avg=Avg('performance_rating'))['avg'] or 0
+    # Sum hours only from these students
+    total_hours = OJTProgress.objects.filter(
+        placement__supervisor=request.user
+    ).aggregate(total=Sum('hours_worked'))['total'] or 0
+
+    class_completion_pct = (
+        round(total_hours / (total_students * MAX_HOURS) * 100, 1)
+        if total_students else 0
+    )
+
+    # Average rating only for these students
+    avg_rating = OJTProgress.objects.filter(
+        placement__supervisor=request.user
+    ).aggregate(avg=Avg('performance_rating'))['avg'] or 0
+
     avg_rating_pct = round(avg_rating / 5 * 100, 1)
 
-    # Star generator
+    # Star function...
     def generate_stars(rating):
         stars = ""
         for i in range(1, 6):
@@ -45,28 +55,16 @@ def dashboard(request):
 
     avg_rating_stars = generate_stars(avg_rating)
 
-    # Helper: generate initials from name
-    def get_initials(fullname: str):
-        parts = fullname.split()
-        if len(parts) == 0:
-            return ""
-        if len(parts) == 1:
-            return parts[0][0].upper()
-        return (parts[0][0] + parts[-1][0]).upper()
-
     # Individual student data
     student_data = []
     for student in students:
-        full_name = student.student.get_full_name()
-        initials = get_initials(full_name)
-
         progress_logs = student.progress_logs.all()
         student_hours = progress_logs.aggregate(total=Sum('hours_worked'))['total'] or 0
         student_avg_rating = progress_logs.aggregate(avg=Avg('performance_rating'))['avg'] or 0
 
         student_data.append({
-            'name': full_name,
-            'initials': initials,
+            'name': student.student.get_full_name(),
+            'initials': student.student.get_full_name().split()[0][0],
             'hours': student_hours,
             'completion_pct': round(student_hours / MAX_HOURS * 100, 1),
             'completion_remaining': round(100 - (student_hours / MAX_HOURS * 100), 1),
