@@ -2,44 +2,48 @@
 {% load static %}
 {% block content %}
 
-<h1 style="text-align: center;">Supervisor Dashboard</h1>
-<p style="text-align: center;">Quick overview of your students' timesheet progress and performance ratings.</p>
+<h1 style="text-align: center; margin-bottom: 10px;">Supervisor Dashboard</h1>
+<p style="text-align: center; margin-bottom: 30px;">Quick overview of your students' timesheet progress and performance ratings.</p>
 
-<!-- MAIN BLOCKS -->
-<div class="dashboard-main">
+<!-- MAIN DASHBOARD CARDS -->
+<div class="dashboard-main horizontal-dashboard">
     <!-- Total Students -->
-    <div class="dashboard-card main-card">
-        <h3>Total Students</h3>
-        <p class="main-value">{{ total_students }}</p>
+    <div class="dashboard-card main-card horizontal-content-card">
+        <div class="card-title">Total Students</div>
+        <div class="card-content">{{ total_students }}</div>
     </div>
 
     <!-- Class Hours Completion -->
-    <div class="dashboard-card main-card">
-        <h3>Class Hours Completion</h3>
-        <canvas id="classCompletionChart" width="120" height="120"></canvas>
-        <p>{{ class_completion_pct }}% of total hours completed</p>
+    <div class="dashboard-card main-card horizontal-content-card">
+        <div class="dashboard-card main-card horizontal-content-card">
+            <div class="left-side">
+                <div class="card-title">Class Hours Completion</div>
+                <div class="card-text-small">{{ class_completion_pct }}% of total hours completed</div>
+            </div>
+            <div class="right-side">
+                <canvas id="classCompletionChart" width="160" height="160"></canvas>
+            </div>
+        </div>
     </div>
 
     <!-- Average Rating -->
-<!-- Average Rating -->
-    <div class="dashboard-card main-card">
-        <h3>Average Rating</h3>
-        <p class="star-rating">
-            {{ avg_rating_stars }} ({{ avg_rating }}/5)
-        </p>
+    <div class="dashboard-card main-card horizontal-content-card">
+        <div class="card-title">Average Rating</div>
+        <div class="card-content">{{ avg_rating_stars }} ({{ avg_rating }}/5)</div>
     </div>
 </div>
 
-<hr style="margin: 40px 0; border-color: rgba(255,255,255,0.2);">
+<hr style="margin: 30px 0; border-color: rgba(255,255,255,0.2);">
 
 <!-- STUDENT SPECIFIC BLOCKS -->
 <div class="students-container">
     {% for student in student_data %}
-    <div class="student-card">
-        <h4>{{ student.name }}</h4>
+    <div class="student-card horizontal-card">
+        <div class="student-name">
+            <h4>{{ student.name }}</h4>
+        </div>
 
-        <div class="student-details">
-            <!-- Completion bar -->
+        <div class="student-details-horizontal">
             <div class="progress-block">
                 <span>Completion: {{ student.completion_pct }}%</span>
                 <div class="progress-bar">
@@ -47,13 +51,9 @@
                 </div>
             </div>
 
-            <!-- Rating stars -->
-<!-- Rating stars for each student -->
             <div class="rating-block">
                 <span>Rating:</span>
-                <span class="star-rating">
-                    {{ student.avg_rating_stars }} ({{ student.avg_rating }}/5)
-                </span>
+                <span class="star-rating">{{ student.avg_rating_stars }} ({{ student.avg_rating }}/5)</span>
             </div>
         </div>
     </div>
@@ -62,64 +62,90 @@
 
 <!-- STYLES -->
 <style>
-.dashboard-main {
+/* MAIN DASHBOARD */
+.dashboard-main.horizontal-dashboard {
     display: flex;
-    gap: 20px;
-    justify-content: space-around;
-    margin-bottom: 40px;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
     flex-wrap: wrap;
 }
 
-.main-card {
+.main-card.horizontal-content-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     flex: 1;
-    min-width: 220px;
-    max-width: 350px;
-    padding: 20px;
+    min-width: 200px;
+    max-width: 600px;
+    padding: 10px 15px;
     border-radius: 10px;
     background: #273849;
-    text-align: center;
+    text-align: left;
 }
 
-.main-value {
-    font-size: 32px;
+.card-title {
     font-weight: bold;
-    margin-top: 10px;
+    font-size: 24px;
+    margin-right: 20px;
+    flex: 1;
 }
 
-.star-rating {
-    color: #fdd835;
-    font-size: 20px;
+.card-text-small {
+    font-weight: normal;
+    font-size: 12px;
+    padding-top: 15px;
+    opacity: 80%;
+    flex: 1;
+}
+
+.card-content {
+    text-align: right;
+    font-size: 24px;
     font-weight: bold;
 }
 
+.card-content canvas {
+    display: block;
+    margin: 0 auto 5px auto;
+}
+
+/* STUDENT CARDS */
 .students-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
-.student-card {
+.student-card.horizontal-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background: #273849;
-    padding: 15px 20px;
+    padding: 10px 15px;
     border-radius: 10px;
 }
 
-.student-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-    flex-wrap: wrap;
+.student-name {
+    flex: 1;
+    font-weight: bold;
 }
 
-.progress-block, .rating-block {
-    width: 48%;
+.student-details-horizontal {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.progress-block {
+    width: 120px;
 }
 
 .progress-bar {
     background: #555;
-    border-radius: 8px;
-    height: 20px;
+    border-radius: 6px;
+    height: 15px;
     margin-top: 5px;
     overflow: hidden;
 }
@@ -127,14 +153,43 @@
 .progress-fill {
     height: 100%;
     background: #4caf50;
-    border-radius: 8px 0 0 8px;
+    border-radius: 6px 0 0 6px;
+}
+
+.rating-block {
+    width: 100px;
+    text-align: center;
+}
+
+/* RESPONSIVE: Stack horizontal cards on small screens */
+@media (max-width: 768px) {
+    .dashboard-main.horizontal-dashboard,
+    .main-card.horizontal-content-card,
+    .student-card.horizontal-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-content {
+        text-align: left;
+        margin-top: 5px;
+    }
+
+    .student-details-horizontal {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .progress-block, .rating-block {
+        width: 100%;
+    }
 }
 </style>
 
 <!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Class completion doughnut
     new Chart(document.getElementById('classCompletionChart'), {
         type: 'doughnut',
         data: {
