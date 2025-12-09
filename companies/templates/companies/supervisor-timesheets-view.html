@@ -1,7 +1,7 @@
 {% extends "companies/base.html" %}
 {% block content %}
 
-<h1>Student Timesheet Overview</h1>
+<h1>Student Timesheet Table View</h1>
 <p>Name: {{ placement.student.get_full_name }}</p>
 <p>Batch: {{ placement.batch_year }}</p>
 
@@ -78,7 +78,7 @@
 <!-- BUTTON TO MODIFY -->
 <div style="margin-top: 30px;">
     <button class="primary-btn" onclick="location.href='{% url 'supervisor_timesheets_modify' placement.id %}'">
-        Modify Timesheet
+        Sign Timesheet
     </button>
 </div>
 
