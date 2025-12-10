@@ -3,7 +3,8 @@
 {% block content %}
 
 <h1 style="text-align: center; margin-bottom: 10px;">Advisor Dashboard</h1>
-<p style="text-align: center; margin-bottom: 30px;">Quick overview of your students' timesheet progress and performance ratings.</p>
+<p style="text-align: center; margin-bottom: 5px;">Quick overview of your students' timesheet progress and performance ratings.</p>
+<p style="text-align: center; margin-bottom: 20px; opacity: .6">✨ Top student performers are highlighted ✨</p>
 
 <!-- MAIN DASHBOARD CARDS -->
 <div class="dashboard-main horizontal-dashboard">
@@ -42,7 +43,7 @@
 <!-- STUDENT SPECIFIC BLOCKS -->
 <div class="students-container">
     {% for student in student_data %}
-    <div class="student-card horizontal-card">
+    <div class="student-card horizontal-card {% if student.is_top %}top-student{% endif %}">
 
         <!-- Avatar + Name -->
         <div class="student-name">
@@ -209,6 +210,11 @@
         opacity: 0.7;
     }
 
+    .top-student {
+        background: #6d5b11ff !important; /* Yellow highlight */
+        border: 2px solid #cfba66ff;
+        {% comment %} box-shadow: 0 0 10px rgba(255, 245, 157, 0.8); {% endcomment %}
+    }
 
 /* RESPONSIVE: Stack horizontal cards on small screens */
 @media (max-width: 768px) {

@@ -13,14 +13,10 @@ from django.db.models import Sum, Avg
 
 @role_required(['company'])
 def dashboard(request):
-    # Only fetch students supervised by this company user
     students = OJTPlacement.objects.filter(supervisor=request.user)
-
     total_students = students.count()
-
     MAX_HOURS = 600
 
-    # Sum hours only from these students
     total_hours = OJTProgress.objects.filter(
         placement__supervisor=request.user
     ).aggregate(total=Sum('hours_worked'))['total'] or 0
@@ -30,14 +26,12 @@ def dashboard(request):
         if total_students else 0
     )
 
-    # Average rating only for these students
     avg_rating = OJTProgress.objects.filter(
         placement__supervisor=request.user
     ).aggregate(avg=Avg('performance_rating'))['avg'] or 0
 
     avg_rating_pct = round(avg_rating / 5 * 100, 1)
 
-    # Star function...
     def generate_stars(rating):
         stars = ""
         for i in range(1, 6):
@@ -51,22 +45,44 @@ def dashboard(request):
 
     avg_rating_stars = generate_stars(avg_rating)
 
-    # Individual student data
     student_data = []
     for student in students:
         progress_logs = student.progress_logs.all()
         student_hours = progress_logs.aggregate(total=Sum('hours_worked'))['total'] or 0
         student_avg_rating = progress_logs.aggregate(avg=Avg('performance_rating'))['avg'] or 0
 
+        completion_pct = round(student_hours / MAX_HOURS * 100, 1)
+
         student_data.append({
             'name': student.student.get_full_name(),
             'initials': student.student.get_full_name().split()[0][0],
             'hours': student_hours,
-            'completion_pct': round(student_hours / MAX_HOURS * 100, 1),
-            'completion_remaining': round(100 - (student_hours / MAX_HOURS * 100), 1),
+            'completion_pct': completion_pct,
+            'completion_remaining': round(100 - completion_pct, 1),
             'avg_rating': round(student_avg_rating, 2),
             'avg_rating_stars': generate_stars(student_avg_rating),
         })
+
+    if student_data:
+
+        # 1. Rank by completion
+        attendance_sorted = sorted(student_data, key=lambda s: s['completion_pct'], reverse=True)
+        for rank, s in enumerate(attendance_sorted, start=1):
+            s['attendance_rank'] = rank
+
+        # 2. Rank by rating
+        rating_sorted = sorted(student_data, key=lambda s: s['avg_rating'], reverse=True)
+        for rank, s in enumerate(rating_sorted, start=1):
+            s['rating_rank'] = rank
+
+        # 3. Combined score
+        for s in student_data:
+            s['score'] = s['attendance_rank'] + s['rating_rank']
+
+        # 4. Determine the winner(s)
+        min_score = min(s['score'] for s in student_data)
+        for s in student_data:
+            s['is_top'] = (s['score'] == min_score)
 
     context = {
         'total_students': total_students,
