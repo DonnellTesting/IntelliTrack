@@ -14,7 +14,67 @@ from django.db.models import Sum, Avg
 
 @role_required(['student'])
 def dashboard(request):
-    return render(request, 'student/student-dashboard.html')
+    # Only fetch students supervised by this company user
+    students = OJTPlacement.objects.filter(student=request.user)
+
+    total_students = 1
+
+    MAX_HOURS = 600
+
+    # Sum hours only from these students
+    total_hours = OJTProgress.objects.filter(placement__student=request.user).aggregate(total=Sum('hours_worked'))['total'] or 0
+
+    class_completion_pct = (
+        round(total_hours / (total_students * MAX_HOURS) * 100, 1)
+        if total_students else 0
+    )
+
+    # Average rating only for these students
+    avg_rating = OJTProgress.objects.filter(placement__student=request.user).aggregate(avg=Avg('performance_rating'))['avg'] or 0
+
+    avg_rating_pct = round(avg_rating / 5 * 100, 1)
+
+    # Star function...
+    def generate_stars(rating):
+        stars = ""
+        for i in range(1, 6):
+            if rating >= i:
+                stars += "★"
+            elif rating >= i - 0.5:
+                stars += "☆"
+            else:
+                stars += "☆"
+        return stars
+
+    avg_rating_stars = generate_stars(avg_rating)
+
+    # Individual student data
+    student_data = []
+    for student in students:
+        progress_logs = student.progress_logs.all()
+        student_hours = progress_logs.aggregate(total=Sum('hours_worked'))['total'] or 0
+        student_avg_rating = progress_logs.aggregate(avg=Avg('performance_rating'))['avg'] or 0
+
+        student_data.append({
+            'name': student.student.get_full_name(),
+            'initials': student.student.get_full_name().split()[0][0],
+            'hours': student_hours,
+            'completion_pct': round(student_hours / MAX_HOURS * 100, 1),
+            'completion_remaining': round(100 - (student_hours / MAX_HOURS * 100), 1),
+            'avg_rating': round(student_avg_rating, 2),
+            'avg_rating_stars': generate_stars(student_avg_rating),
+        })
+
+    context = {
+        'total_students': total_students,
+        'class_completion_pct': class_completion_pct,
+        'class_completion_remaining': 100 - class_completion_pct,
+        'avg_rating': round(avg_rating, 2),
+        'avg_rating_stars': avg_rating_stars,
+        'student_data': student_data,
+    }
+
+    return render(request, 'student/student-dashboard.html', context)
 
 @role_required(['student'])
 def student_class(request):

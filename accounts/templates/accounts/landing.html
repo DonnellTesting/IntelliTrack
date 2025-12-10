@@ -15,7 +15,6 @@
         color: white;
     }
 
-    /* NAVBAR */
     .navbar {
         display: flex;
         justify-content: space-between;
@@ -61,13 +60,12 @@
         color: white !important;
     }
 
-    /* TOP HERO SECTION */
     .hero-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 80px 50px;
-        background: #2C3E50; /* keep your base color */
+        background: #2C3E50; 
         color: white;
         gap: 40px;
         flex-wrap: wrap;
@@ -80,7 +78,7 @@
         inset: 0;
         background: url("{% static 'accounts/resources/schoolbg.png' %}") 
             center/cover no-repeat;
-        opacity: 0.15; /* 50% opacity */
+        opacity: 0.05;
         z-index: 0;
     }
 
@@ -139,14 +137,12 @@
         border-radius: 12px;
     }
 
-    /* CENTERED HERO SECTIONS */
     .hero-center {
         text-align: center;
         padding: 60px 40px;
         background: #2C3E50;
     }
 
-    /* SECTIONS */
     .section {
         padding: 70px 40px;
         max-width: 1100px;
@@ -171,7 +167,6 @@
         margin-bottom: 50px;
     }
 
-    /* FEATURES */
     .features {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -193,7 +188,6 @@
         color: #60A5FA;
     }
 
-    /* FOOTER */
     .footer {
         text-align: center;
         padding: 10px;
@@ -210,7 +204,6 @@
         color: gray;
     }
 
-    /* RESPONSIVE */
     @media(max-width: 900px) {
         .hero-top {
             flex-direction: column;
@@ -228,7 +221,7 @@
 </head>
 <body>
 
-<!-- NAVIGATION -->
+
 <div class="navbar">
     <div class="navbar-title">
         <img src="{% static 'accounts/resources/logo.png' %}" alt="Logo">
@@ -239,7 +232,6 @@
     </div>
 </div>
 
-<!-- TOP HERO -->
 <div class="hero-top">
     <div class="hero-left">
         <h1>President Ramon Magsaysay State University</h1>
@@ -258,7 +250,6 @@
     </div>
 </div>
 
-<!-- FEATURES SECTION -->
 <div class="section">
     <h2 class="section-title">Powerful Features for OJT Management</h2>
     <p class="section-subtitle">Everything you need to monitor, evaluate, and analyze trainee performance</p>
@@ -291,7 +282,6 @@
     </div>
 </div>
 
-<!-- WHY CHOOSE INTELLITRACK -->
 <div class="hero-center">
     <h2>Why Choose IntelliTrack?</h2>
     <p>
@@ -300,7 +290,6 @@
     </p>
 </div>
 
-<!-- CAPABILITIES SECTION -->
 <div class="section">
     <h2 class="section-title">Comprehensive Capabilities</h2>
     <p class="section-subtitle">All-in-one solution for OJT monitoring and performance analysis</p>
@@ -315,7 +304,6 @@
     </div>
 </div>
 
-<!-- CTA SECTION -->
 <div class="hero-center">
     <h2>Ready to Transform Your OJT Management?</h2>
     <p class="subtext">
@@ -323,7 +311,6 @@
     </p>
 </div>
 
-<!-- FOOTER -->
 <div class="footer">
     IntelliTrack <br />
     © 2025 IntelliTrack. All rights reserved.
