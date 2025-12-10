@@ -79,7 +79,7 @@ def dashboard(request):
 @role_required(['student'])
 def student_class(request):
     placements = (
-        OJTPlacement.objects
+        OJTPlacement.objects.filter(batch_year=request.user.ojt_placement.batch_year)
         .select_related("student")
         .order_by("company_name", "student__last_name", "student__first_name")
     )
