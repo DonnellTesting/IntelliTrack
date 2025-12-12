@@ -200,6 +200,51 @@ def instructor_timesheets_calendar(request, placement_id):
     })
 
 @role_required(['instructor'])
+def instructor_timesheets_print(request, placement_id):
+    placement = get_object_or_404(OJTPlacement, id=placement_id)
+    logs = placement.progress_logs.all()
+
+    MAX_HOURS = 600
+
+    total_hours = logs.aggregate(total=Sum('hours_worked'))['total'] or 0
+    completion_pct = round(total_hours / MAX_HOURS * 100, 1)
+
+    avg_rating = logs.aggregate(avg=Avg('performance_rating'))['avg'] or 0
+    avg_rating = round(avg_rating, 2)
+
+    def generate_stars(rating):
+        stars = ""
+        for i in range(1, 6):
+            stars += "★" if rating >= i else "☆"
+        return stars
+
+    star_string = generate_stars(avg_rating)
+
+    today = date.today()
+
+    return render(request, "teacher/teacher-timesheets-print.html", {
+        "placement": placement,
+        "logs": logs,
+        "total_hours": total_hours,
+        "completion_pct": completion_pct,
+        "avg_rating": avg_rating,
+        "avg_rating_stars": star_string,
+        "today": today,
+    })
+
+@role_required(['instructor'])
+def instructor_timesheets_certificate(request, placement_id):
+    placement = get_object_or_404(OJTPlacement, id=placement_id)
+
+    from datetime import date
+    today = date.today()
+
+    return render(request, "teacher/teacher-timesheets-certificate.html", {
+        "placement": placement,
+        "today": today,
+    })
+
+@role_required(['instructor'])
 def instructor_announcement_create(request):
     if request.method == 'POST':
         form = AnnouncementForm(request.POST)

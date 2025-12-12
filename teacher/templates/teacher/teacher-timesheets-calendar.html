@@ -1,4 +1,4 @@
-{% extends "companies/base.html" %}
+{% extends "teacher/base.html" %}
 {% block content %}
 
 <h1>Student Timesheet Calendar View</h1>
@@ -27,6 +27,15 @@
 
 <button class="primary-btn" onclick="location.href='{% url 'instructor_timesheets_view' placement.id %}'">
     Switch to Table View
+</button>
+
+<button class="primary-btn"  onclick="window.open('/instructor/timesheets/print/{{ placement.id }}', '_blank');">
+    Print OJT Summary
+</button>
+
+<button class="primary-btn" style="margin-bottom: 20px; margin-right: 20px;" 
+         onclick="window.open('/instructor/timesheets/certificate/{{ placement.id }}', '_blank');">
+    Print OJT CERTIFICATE
 </button>
 
 <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
@@ -103,6 +112,8 @@
     border-radius: 6px;
     cursor: pointer;
     transition: 0.2s;
+    margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .primary-btn:hover {
