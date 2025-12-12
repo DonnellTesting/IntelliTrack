@@ -13,6 +13,8 @@ urlpatterns = [
     path('change-password/', views.change_password, name='change_password'),
     path('logout/', views.logout_user, name='logout'),
     path('profile/', views.profile_page, name='profile'),
+    path('timesheets/print/<int:placement_id>/', views.timesheets_print, name='timesheets_print'),
+    path('timesheets/certificate/<int:placement_id>', views.timesheets_certificate, name='timesheets_certificate'),
 
     path("reset-password/",
          auth_views.PasswordResetView.as_view(
