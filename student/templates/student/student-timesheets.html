@@ -31,9 +31,14 @@
 </div>
 
 <!-- CALENDAR WRAPPER -->
-<button class="primary-btn" style="margin-bottom: 20px;" 
+<button class="primary-btn" style="margin-bottom: 20px; margin-right: 20px;" 
         onclick="location.href='{% url 'student_timesheets_calendar' placement.id %}'">
     Switch to Calendar View
+</button>
+
+<button class="primary-btn" style="margin-bottom: 20px; margin-right: 20px;" 
+         onclick="window.open('/timesheets/print/{{ placement.id }}', '_blank');">
+    Print OJT Report
 </button>
 
 <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">

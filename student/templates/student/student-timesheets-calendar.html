@@ -25,8 +25,12 @@
     </div>
 </div>
 
-<button class="primary-btn" onclick="location.href='{% url 'student_timesheets' placement.id %}'">
+<button class="primary-btn" style="margin-right: 20px"; onclick="location.href='{% url 'student_timesheets' placement.id %}'">
     Switch to Table View
+</button>
+
+<button class="primary-btn"  onclick="window.open('/timesheets/print/{{ placement.id }}', '_blank');">
+    Print OJT Summary
 </button>
 
 <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
