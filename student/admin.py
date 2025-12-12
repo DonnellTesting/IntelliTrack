@@ -26,6 +26,7 @@ class OJTPlacementAdmin(admin.ModelAdmin):
         "student", "supervisor", "company_name",
         "start_date", "end_date", "schedule_days", "schedule_time"
     )
+    readonly_fields = ('batch_year',)
 
 
 @admin.register(OJTProgress)

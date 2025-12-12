@@ -3,6 +3,37 @@
 
 <h1 style="text-align: center;">Sign Student Timesheet and Performance</h1>
 
+{% if saved %}
+<div id="success-popup" class="popup">
+    Timesheet updated successfully!
+</div>
+{% endif %}
+
+<style>
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #4CAF50;
+        color: white;
+        padding: 18px 28px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        opacity: 0;
+        animation: fadeInOut 2.5s ease forwards;
+        z-index: 9999;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+</style>
+
 <div class="center-container">
     <div class="profile-card">
         <div class="profile-row">
@@ -186,10 +217,10 @@ input:focus, select:focus, textarea:focus {
 }
 </style>
 
-{% if saved %}
+{% comment %} {% if saved %}
 <script>
     alert("Timesheet updated successfully!");
 </script>
-{% endif %}
+{% endif %} {% endcomment %}
 
 {% endblock %}

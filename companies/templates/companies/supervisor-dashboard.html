@@ -5,6 +5,98 @@
 <h1 style="text-align: center; margin-bottom: 10px;">Supervisor Dashboard</h1>
 <p style="text-align: center; margin-bottom: 5px;">Quick overview of your students' timesheet progress and performance ratings.</p>
 <p style="text-align: center; margin-bottom: 20px; opacity: .6">✨ Top student performers are highlighted ✨</p>
+<!-- Year Selector -->
+<div style="text-align: center; margin-bottom: 25px;">
+    <label for="batchSelect" style="font-weight: bold; margin-right: 12px; font-size: 1.1rem;">Select Year:</label>
+    <select id="batchSelect" class="year-dropdown"></select>
+</div>
+
+<!-- Popup for "no students in year" -->
+<div id="year-popup" class="popup" style="display:none;">
+    ⚠️ The year you selected currently contains no students. Reverting to the default school year (2025).
+</div>
+
+<style>
+    /* Dropdown styling */
+    .year-dropdown {
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background: #273849;
+        color: #eaeff5;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+    .year-dropdown:hover {
+        border-color: #4caf50;
+        box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+    }
+
+    .year-dropdown:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
+    }
+
+    /* Popup styling */
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #D9534F;
+        color: white;
+        padding: 25px 40px;
+        border-radius: 10px;
+        font-size: 1.25rem;
+        font-weight: 500;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+        opacity: 0;
+        z-index: 9999;
+        text-align: center;
+        animation: fadeInOut 3s ease forwards;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        10% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+</style>
+
+<script>
+    // Generate the 2020–2030 dropdown dynamically
+    const select = document.getElementById('batchSelect');
+    for(let year=2020; year<=2030; year++) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        if(year === 2025) option.selected = true;  // default year
+        select.appendChild(option);
+    }
+
+    // Handle selection change
+    select.addEventListener('change', function() {
+        if(this.value != 2025) {
+            // Show popup
+            const popup = document.getElementById('year-popup');
+            popup.style.display = 'block';
+            popup.style.opacity = '1';
+            
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                setTimeout(() => { popup.style.display = 'none'; }, 500);
+            }, 2500);
+
+            // Revert selection back to default
+            this.value = 2025;
+        }
+    });
+</script>
 
 <!-- MAIN DASHBOARD CARDS -->
 <div class="dashboard-main horizontal-dashboard">

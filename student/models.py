@@ -6,7 +6,11 @@ from django.db import models
 from multiselectfield import MultiSelectField  # install django-multiselectfield
 
 CURRENT_YEAR = datetime.date.today().year
-YEAR_CHOICES = [(y, f"Class of {y}") for y in range(CURRENT_YEAR-5, CURRENT_YEAR+5)]
+# YEAR_CHOICES = [(y, f"Class of {y}") for y in range(CURRENT_YEAR-5, CURRENT_YEAR+5)]
+YEAR_CHOICES = [
+    (2025, "Class of 2025"),
+]
+
 DAYS_OF_WEEK = (
     ('Mon', 'Monday'),
     ('Tue', 'Tuesday'),
@@ -34,7 +38,13 @@ class OJTPlacement(models.Model):
         limit_choices_to={'role': 'company'}
     )
 
-    batch_year = models.IntegerField(choices=YEAR_CHOICES, null=True, blank=True)
+    batch_year = models.IntegerField(
+        choices=YEAR_CHOICES,
+        null=True,
+        blank=True,
+        default=2025
+    )
+
     company_name = models.CharField(max_length=255, blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
