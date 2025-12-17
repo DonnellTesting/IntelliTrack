@@ -15,7 +15,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SECRET_KEY = 'django-insecure-n49tx0=5!zs^1s$$rp0(plkgw$xy_i@6b5*$kq!gmd6tkuwh6a'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +39,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://intellitrack-667915634122.us-central1.run.app",
 ]
 
 ROOT_URLCONF = 'ojt_tracker.urls'

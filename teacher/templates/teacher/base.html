@@ -35,6 +35,40 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
+        /* COLLAPSIBLE SIDEBAR */
+        .sidebar {
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        /* Hide text when collapsed */
+        .sidebar.collapsed .app-name,
+        .sidebar.collapsed .role-label,
+        .sidebar.collapsed .nav-item,
+        .sidebar.collapsed .profile-name {
+            display: none;
+        }
+
+        /* Hide logo completely when collapsed */
+        .sidebar.collapsed .home-logo {
+            display: none;
+        }
+
+        /* Toggle button */
+        .toggle-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
         .home-logo {
             display: block;
             margin: 0 auto 25px;
@@ -147,6 +181,29 @@
             padding: 40px;
             overflow-y: auto;
         }
+
+        /* MOBILE RESPONSIVENESS */
+        @media (max-width: 768px) {
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+                transform: translateX(0);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.collapsed {
+                transform: translateX(-100%);
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+        }
+
     </style>
 
     <script>
@@ -158,6 +215,10 @@
         function toggleProfile() {
             let menu = document.getElementById("profileMenu");
             menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+        }
+
+        function toggleSidebar() {
+            document.querySelector(".sidebar").classList.toggle("collapsed");
         }
     </script>
 
@@ -184,13 +245,6 @@
 
         <div class="nav-item" onclick="location.href='/instructor/timesheets'">Timesheets & Performances</div>
 
-        {% comment %} <div class="nav-item" onclick="toggleDropdown('ojtMenu')">OJT Management ▾</div>
-        <div id="ojtMenu" class="dropdown">
-            <a href="/instructor/timesheets">Student Timesheets</a>
-            <a href="/instructor/performance">Student Performances</a>
-            <a href="/instructor/placements">Student OJT Placements</a>
-        </div> {% endcomment %}
-
         <div class="nav-item" onclick="toggleDropdown('annMenu')">Announcements ▾</div>
         <div id="annMenu" class="dropdown">
             <a href="/instructor/announcements/view">View Announcements</a>
@@ -216,6 +270,7 @@
 </div>
 
 <!-- CONTENT -->
+<button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 <div class="content-area">
     {% block content %}
     <h1>Welcome, Instructor!</h1>
