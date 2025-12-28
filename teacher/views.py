@@ -63,7 +63,11 @@ def dashboard(request):
             'avg_rating_stars': generate_stars(student_avg_rating),
         })
 
-    # 1. Rank by attendance (completion_pct)
+    # -------------------------
+    # RANKING LOGIC
+    # -------------------------
+
+    # 1. Rank by attendance
     attendance_sorted = sorted(student_data, key=lambda s: s['completion_pct'], reverse=True)
     for rank, student in enumerate(attendance_sorted, start=1):
         student['attendance_rank'] = rank
@@ -77,10 +81,22 @@ def dashboard(request):
     for student in student_data:
         student['score'] = student['attendance_rank'] + student['rating_rank']
 
-    # 4. Determine winners
-    min_score = min(s['score'] for s in student_data)
-    for student in student_data:
-        student['is_top'] = (student['score'] == min_score)
+    # -------------------------
+    # TOP STUDENT RULE
+    # ONLY IF ALL COMPLETED
+    # -------------------------
+    all_students_completed = all(
+        student['hours'] >= MAX_HOURS
+        for student in student_data
+    )
+
+    if all_students_completed and student_data:
+        min_score = min(s['score'] for s in student_data)
+        for student in student_data:
+            student['is_top'] = (student['score'] == min_score)
+    else:
+        for student in student_data:
+            student['is_top'] = False
 
     context = {
         'total_students': total_students,
@@ -89,6 +105,7 @@ def dashboard(request):
         'avg_rating': round(avg_rating, 2),
         'avg_rating_stars': avg_rating_stars,
         'student_data': student_data,
+        'all_students_completed': all_students_completed,
     }
 
     return render(request, 'teacher/teacher-dashboard.html', context)

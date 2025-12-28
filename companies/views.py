@@ -11,6 +11,7 @@ from datetime import date
 import calendar
 from django.db.models import Sum, Avg
 
+# Dashboard
 @role_required(['company'])
 def dashboard(request):
     students = OJTPlacement.objects.filter(supervisor=request.user)
@@ -45,6 +46,9 @@ def dashboard(request):
 
     avg_rating_stars = generate_stars(avg_rating)
 
+    # -------------------------
+    # BUILD STUDENT DATA
+    # -------------------------
     student_data = []
     for student in students:
         progress_logs = student.progress_logs.all()
@@ -63,6 +67,9 @@ def dashboard(request):
             'avg_rating_stars': generate_stars(student_avg_rating),
         })
 
+    # -------------------------
+    # RANKING LOGIC
+    # -------------------------
     if student_data:
 
         # 1. Rank by completion
@@ -79,10 +86,22 @@ def dashboard(request):
         for s in student_data:
             s['score'] = s['attendance_rank'] + s['rating_rank']
 
-        # 4. Determine the winner(s)
-        min_score = min(s['score'] for s in student_data)
-        for s in student_data:
-            s['is_top'] = (s['score'] == min_score)
+        # -------------------------
+        # TOP STUDENT RULE
+        # ONLY IF ALL COMPLETED
+        # -------------------------
+        all_students_completed = all(
+            s['hours'] >= MAX_HOURS
+            for s in student_data
+        )
+
+        if all_students_completed:
+            min_score = min(s['score'] for s in student_data)
+            for s in student_data:
+                s['is_top'] = (s['score'] == min_score)
+        else:
+            for s in student_data:
+                s['is_top'] = False
 
     context = {
         'total_students': total_students,
@@ -91,6 +110,9 @@ def dashboard(request):
         'avg_rating': round(avg_rating, 2),
         'avg_rating_stars': avg_rating_stars,
         'student_data': student_data,
+        'all_students_completed': all(
+            s['hours'] >= MAX_HOURS for s in student_data
+        ) if student_data else False,
     }
 
     return render(request, 'companies/supervisor-dashboard.html', context)

@@ -39,6 +39,47 @@
     Print OJT CERTIFICATE
 </button>
 
+<button class="info-btn" onclick="toggleInfoModal()" title="Calendar Information">
+    ⓘ
+</button>
+
+<div id="infoModal" class="info-modal">
+    <div class="info-modal-content">
+        <span class="close-btn" onclick="toggleInfoModal()">×</span>
+
+        <h3>📅 Attendance Calendar Guide</h3>
+
+        <p>
+            This calendar provides a day-by-day visual summary of the student’s
+            attendance and performance during their OJT period.
+        </p>
+
+        <ul class="legend">
+            <li>
+                <span class="legend-box green"></span>
+                <strong>Green</strong> — Excellent performance (4–5 stars)
+            </li>
+            <li>
+                <span class="legend-box yellow"></span>
+                <strong>Yellow</strong> — Satisfactory performance (3 stars)
+            </li>
+            <li>
+                <span class="legend-box red"></span>
+                <strong>Red</strong> — Poor performance (1–2 stars)
+            </li>
+            <li>
+                <span class="legend-box gray"></span>
+                <strong>Gray</strong> — ABSENT 
+            </li>
+        </ul>
+
+        <p class="note">
+            Each day may also display the total hours worked and the performance
+            rating for that date.
+        </p>
+    </div>
+</div>
+
 <hr style="border-color: rgba(255,255,255,0.2); margin: 20px 0;">
 
 <div class="calendar-container">
@@ -65,7 +106,9 @@
                     {% if day.month != month.number %}other-month{% endif %}
 
                     {% if day_log %}
-                        {% if day_log.performance_rating <= 2 %}
+                        {% if day_log.hours_worked == 0 %}
+                                rating-gray
+                        {% elif day_log.performance_rating <= 2 %}
                             rating-red
                         {% elif day_log.performance_rating == 3 %}
                             rating-yellow
@@ -193,9 +236,99 @@
     border: 1px solid #6ca96c;
 }
 
+.rating-gray {
+    background: #2b323bff;
+    border: 1px dashed #555;
+    opacity: 0.9;
+}
+
+/* ℹ️ Info Button — Borderless */
+.info-btn {
+    background: transparent;
+    border: none;               /* ✅ remove outer border */
+    color: #00bcd4;
+    font-size: 20px;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: background 0.2s, color 0.2s;
+}
+
+.info-btn:hover {
+    background: rgba(0, 188, 212, 0.15); /* subtle hover cue */
+    color: #00bcd4;
+}
+
+
+/* 🪟 Info Modal */
+.info-modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.info-modal-content {
+    background: #273849;
+    max-width: 500px;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 10px;
+    position: relative;
+    color: #fff;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* 📊 Legend */
+.legend {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.legend li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.legend-box {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.legend-box.green { background: #72b372ff; }
+.legend-box.yellow { background: #9c8f4a; }
+.legend-box.red { background: #8b4040; }
+.legend-box.gray { background: #1F2A37; }
+
+.note {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
 </style>
 
 <script>
+
+    function toggleInfoModal() {
+    const modal = document.getElementById("infoModal");
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
+}
     document.addEventListener("DOMContentLoaded", () => {
 
     // ⭐ STAR ANIMATION

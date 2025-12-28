@@ -11,6 +11,12 @@ class User(AbstractUser):
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
+    company_image = models.ImageField(
+        upload_to='company_images/',
+        null=True,
+        blank=True
+    )
+
     def __str__(self):
         return f"{self.username} ({self.role})"
     

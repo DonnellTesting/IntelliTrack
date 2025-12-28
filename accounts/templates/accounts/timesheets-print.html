@@ -8,92 +8,165 @@
         body {
             font-family: Arial, sans-serif;
             padding: 40px;
+            background: #f9f9f9;
         }
+
         .header {
             text-align: center;
             margin-bottom: 20px;
         }
-        .logo {
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 20px;
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            color: #222;
         }
 
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+        .header h3 {
+            margin: 2px 0;
+            color: #444;
         }
+
         .info-box {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 15px 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
+
+        .info-box p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            background: #fff;
+            border-radius: 5px;
+            overflow: hidden;
         }
-        th, td {
-            border: 1px solid #333;
-            padding: 8px;
+
+        th {
+            background: #e0e0e0;
+            color: #333;
+            font-weight: bold;
+            padding: 10px;
             text-align: left;
         }
+
+        td {
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f6f6f6;
+        }
+
         .footer {
             margin-top: 40px;
             font-size: 14px;
             text-align: center;
+            color: #666;
         }
+
         @media print {
             button { display: none; }
+            body { background: white !important; }
         }
     </style>
 </head>
 
-<body onload="window.print()">
+<body>
 
-    <button onclick="window.print()" style="margin-bottom: 20px;">Print Again</button>
+    <!-- Only on-screen button -->
+    <div class="buttons">
+        <button onclick="window.print()" style="margin-bottom: 20px;">Print Progress</button>
+        <button onclick="downloadDoc()" style="margin-bottom: 20px;">Download as Editable DOC</button>
+    </div>
 
-    <div class="header">
-        <div class="logo">
-            <img src="{% static 'accounts/resources/logo.png' %}" alt="Logo">
+    <!-- Main content for screen & download -->
+    <div class="doc-content">
+        <div class="header">
+            <h1>OJT Timesheet Summary</h1>
+            <h3>{{ placement.student.get_full_name }}</h3>
+            <p>{{ placement.company_name }}</p>
+            <p>Date Printed: {{ today }}</p>
         </div>
-        <h1>OJT Timesheet Summary</h1>
-        <h3>{{ placement.student.get_full_name }}</h3>
-        <p>{{ placement.company_name }}</p>
-        <p>Date Printed: {{ today }}</p>
+
+        <div class="info-box">
+            <p><strong>Total Hours:</strong> {{ total_hours }}</p>
+            <p><strong>Completion:</strong> {{ completion_pct }}%</p>
+            <p><strong>Average Rating:</strong> {{ avg_rating }} ({{ avg_rating_stars }})</p>
+        </div>
+
+        <h3>Daily Logs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Hours Worked</th>
+                    <th>Rating</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.date }}</td>
+                    <td>{{ log.hours_worked }}</td>
+                    <td>{{ log.performance_rating }}</td>
+                    <td>{{ log.remarks|default:"—" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <p>This document certifies that the student has completed the recorded logs as of {{ today }}.</p>
+            <p>Generated automatically via IntelliTrack OJT System.</p>
+        </div>
     </div>
 
-    <div class="info-box">
-        <p><strong>Total Hours:</strong> {{ total_hours }}</p>
-        <p><strong>Completion:</strong> {{ completion_pct }}%</p>
-        <p><strong>Average Rating:</strong> {{ avg_rating }} ({{ avg_rating_stars }})</p>
-    </div>
+    <script>
+    function downloadDoc() {
+        // Only grab the main content, not buttons
+        var content = document.querySelector('.doc-content').outerHTML;
 
-    <h3>Daily Logs</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Hours Worked</th>
-                <th>Rating</th>
-                <th>Remarks</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for log in logs %}
-            <tr>
-                <td>{{ log.date }}</td>
-                <td>{{ log.hours_worked }}</td>
-                <td>{{ log.performance_rating }}</td>
-                <td>{{ log.remarks|default:"—" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        var styles = `
+        <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background: #f9f9f9; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 28px; margin-bottom: 5px; color: #222; }
+        .header h3 { margin: 2px 0; color: #444; }
+        .info-box { margin-bottom: 30px; padding: 15px 20px; background: #fff; border: 1px solid #ddd; border-radius: 5px; }
+        .info-box p { margin: 5px 0; font-size: 16px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #fff; border-radius: 5px; overflow: hidden; }
+        th { background: #e0e0e0; color: #333; font-weight: bold; padding: 10px; text-align: left; }
+        td { border-bottom: 1px solid #ddd; padding: 10px; }
+        tbody tr:nth-child(even) { background: #f6f6f6; }
+        .footer { margin-top: 40px; font-size: 14px; text-align: center; color: #666; }
+        </style>
+        `;
 
-    <div class="footer">
-        <p>This document certifies that the student has completed the recorded logs as of {{ today }}.</p>
-        <p>Generated automatically via IntelliTrack OJT System.</p>
-    </div>
+        var header = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+                     'xmlns:w="urn:schemas-microsoft-com:office:word" ' +
+                     'xmlns="http://www.w3.org/TR/REC-html40">' +
+                     '<head><meta charset="utf-8"><title>OJT Timesheet</title>' + styles + '</head><body>';
+
+        var footer = '</body></html>';
+
+        var blob = new Blob([header + content + footer], { type: 'application/msword' });
+
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'OJT_Timesheet.doc';
+        link.click();
+    }
+    </script>
 
 </body>
 </html>
