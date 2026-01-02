@@ -163,11 +163,22 @@ def supervisor_timesheets_modify(request, placement_id):
 
     saved = False  # flag for template
 
+    # 🔹 rating → remarks mapping
+    REMARKS_MAP = {
+        1: "Late",
+        2: "Needs Improvements",
+        3: "Meets Expectations",
+        4: "Above Average",
+        5: "On Time and Outstanding",
+    }
+
     if request.method == "POST":
         date = request.POST.get("date")
         hours = request.POST.get("hours_worked")
-        rating = request.POST.get("performance_rating")
-        remarks = request.POST.get("remarks")
+        rating = int(request.POST.get("performance_rating"))  # cast to int
+
+        # 🔹 auto-generate remarks
+        remarks = REMARKS_MAP.get(rating, "")
 
         progress, created = OJTProgress.objects.update_or_create(
             placement=placement,
@@ -180,17 +191,24 @@ def supervisor_timesheets_modify(request, placement_id):
             }
         )
 
-        saved = True  # set flag
+        saved = True
 
-        # stay on the same page
-        return render(request, "companies/supervisor-timesheets-modify.html", {
-            "placement": placement,
-            "saved": saved
-        })
+        return render(
+            request,
+            "companies/supervisor-timesheets-modify.html",
+            {
+                "placement": placement,
+                "saved": saved
+            }
+        )
 
-    return render(request, "companies/supervisor-timesheets-modify.html", {
-        "placement": placement
-    })
+    return render(
+        request,
+        "companies/supervisor-timesheets-modify.html",
+        {
+            "placement": placement
+        }
+    )
 
 def supervisor_timesheets_delete(request, log_id):
 
