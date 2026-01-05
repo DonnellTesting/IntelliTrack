@@ -65,6 +65,7 @@ def dashboard(request):
             'completion_remaining': round(100 - completion_pct, 1),
             'avg_rating': round(student_avg_rating, 2),
             'avg_rating_stars': generate_stars(student_avg_rating),
+            'phone_number': student.phone_number or "N/A",
         })
 
     # -------------------------
@@ -210,6 +211,7 @@ def supervisor_timesheets_modify(request, placement_id):
         }
     )
 
+@role_required(['company'])
 def supervisor_timesheets_delete(request, log_id):
 
     log = get_object_or_404(OJTProgress, id=log_id, supervisor=request.user)

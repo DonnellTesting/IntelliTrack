@@ -17,7 +17,7 @@ class OJTPlacementForm(forms.ModelForm):
 
     class Meta:
         model = OJTPlacement
-        fields = '__all__'
+        fields = '__all__'  # includes phone_number now
 
 @admin.register(OJTPlacement)
 class OJTPlacementAdmin(admin.ModelAdmin):

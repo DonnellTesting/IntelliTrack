@@ -52,8 +52,11 @@ class OJTPlacement(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     # new schedule fields
-    schedule_days = MultiSelectField(choices=DAYS_OF_WEEK, blank=True)  # optional for existing data
-    schedule_time = models.TimeField(blank=True, null=True)  # optional for existing data
+    schedule_days = MultiSelectField(choices=DAYS_OF_WEEK, blank=True)
+    schedule_time = models.TimeField(blank=True, null=True)
+
+    # ✅ new phone number field
+    phone_number = models.CharField(max_length=20, blank=True, null=True, help_text="Optional student phone number")
 
     def __str__(self):
         return f"{self.student.get_full_name()} - {self.company_name or 'No company yet'}"

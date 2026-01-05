@@ -61,6 +61,7 @@ def dashboard(request):
             'completion_remaining': round(100 - completion_pct, 1),
             'avg_rating': round(student_avg_rating, 2),
             'avg_rating_stars': generate_stars(student_avg_rating),
+            'phone_number': student.phone_number or "N/A",
         })
 
     # -------------------------
